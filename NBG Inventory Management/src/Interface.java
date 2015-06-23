@@ -9,18 +9,25 @@ import java.awt.BorderLayout;
 import javax.swing.JTable;
 import javax.swing.JMenuBar;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JSplitPane;
+import javax.swing.JPopupMenu;
+import java.awt.Component;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.ListSelectionModel;
+import javax.swing.JTabbedPane;
 
 
 public class Interface {
 
 	private JFrame frmNbGardensInventory;
 	private JTable table;
-	private JTable table_1;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -84,26 +91,14 @@ public class Interface {
 		 menuBar.add(menu);
 		 menuItem = new JMenuItem("Toggle Simulation");
 		 menu.add(menuItem);
-		 //#endregion
-		 //#region Table
-		 table_1 = new JTable();
-		 table_1.setModel(new DefaultTableModel(
-		 	new Object[][] {
-		 	},
-		 	new String[] {
-		 	}
-		 ));
-		 frmNbGardensInventory.getContentPane().add(table_1, BorderLayout.EAST);
-		 //#endregion
 		 
+		 JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		 frmNbGardensInventory.getContentPane().add(tabbedPane, BorderLayout.CENTER);
+		 //TODO add tabs for invoices and stock order
+		 // #endregion
 		
-		/*
-		MenuItem menuOption = new JMenuItem("Export To Text File");
-		menuOption.getAccessibleContext().setAccessibleDescription("Exports current stock levels to a TXT file");
-		menuBar.add(menuOption);
-		table = new JTable();
-		frame.getContentPane().add(table, BorderLayout.NORTH);
-		*/
 	}
 
+	private static void addPopup(Component component, final JPopupMenu popup) {
+	}
 }
