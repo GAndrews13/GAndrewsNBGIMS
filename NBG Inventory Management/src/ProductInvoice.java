@@ -1,7 +1,6 @@
 
-public class ProductInvoice extends ProductOrder {
-
-	//TODO fill
+public class ProductInvoice extends ProductOrder
+{
 	/**
 	 * The unique ID of the invoice
 	 */
@@ -19,7 +18,18 @@ public class ProductInvoice extends ProductOrder {
 	 */
 	private void Alert()
 	{
-		//TODO throw alert (From inventoryManagementSystem class) when finalised
-		//Change Stock Levels
+		InventoryManagementSystem.StockIncreaseAlert("Stock Has Increased", "The following items have increased in stock: ", super.ProductsOrdered());
+	}
+	/**
+	 * Increase stock levels based on the items in the invoice
+	 */
+	public void increaseStock()
+	{
+		for(int i = 0; i<super.ProductsOrdered().size();i++)
+		{
+			super.ProductsOrdered().get(i).Product().IncreaseStockLevel(super.ProductsOrdered().get(i).Quantity());
+		}
+		//TODO Product: Change Stock Levels	
+		Alert();
 	}
 }

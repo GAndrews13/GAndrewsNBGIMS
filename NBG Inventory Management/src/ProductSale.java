@@ -1,7 +1,6 @@
 
-public class ProductSale extends ProductOrder {
-
-	//TODO fill
+public class ProductSale extends ProductOrder
+{
 	/**
 	 * The unique ID that relates to this product Sale
 	 */

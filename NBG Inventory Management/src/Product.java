@@ -175,7 +175,6 @@ public class Product {
 	 */
 	public void RemoveStock(int inStockAdj)
 	{
-		//TODO 
 		productStock -= inStockAdj;
 		if(productStock <= stockCriticalLevel)
 		{

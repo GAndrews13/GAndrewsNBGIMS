@@ -1,7 +1,6 @@
 
-public class ProductOrderLine {
-
-	//TODO fill
+public class ProductOrderLine
+{
 	/**
 	 * The unique ID of the product order line
 	 */
@@ -36,13 +35,28 @@ public class ProductOrderLine {
 		productID = inProduct;
 	}
 	/**
+	 * Returns the product that the product order line referes to 
+	 * @return
+	 */
+	public Product Product()
+	{
+		return productID;
+	}
+	/**
+	 * Returns the number of items that are in this particular product order
+	 * @return
+	 */
+	public int Quantity()
+	{
+		return quantity;
+	}
+	/**
 	 * Allows you to change the quantity of the product in this order. Should it be set to 0 (or lower) the product is then removed and the product order cancelled
 	 * @param inChange
 	 */
 	public void ChangeQuantity(int inChange)
 	{
 		int newValue = quantity += inChange;
-		//TODO expand functionality
 		if(newValue <= 0)
 		{
 			RemoveProduct();
@@ -57,14 +71,14 @@ public class ProductOrderLine {
 	 */
 	private void RemoveProduct()
 	{
-		//TODO CHANGE
+		//TODO BadCode: CHANGE
 		productID = null;
 	}
 	/**
-	 * Calculates the total cost of the products involved in this part of the order
+	 * Calculates the total cost of the products involved in this part of the order and returns it
 	 */
-	private void CalculateCost()
+	public int CalculateCost()
 	{
-		//TODO add up costings from all products
+		return productID.ProductCost()*productID.ProductCost();
 	}
 }

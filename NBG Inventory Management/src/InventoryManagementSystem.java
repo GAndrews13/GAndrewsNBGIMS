@@ -24,7 +24,7 @@ public class InventoryManagementSystem {
 	/**
 	 * The array of products stored within the system
 	 */
-	private List<Product> productCatalog;
+	private static List<Product> productCatalog;
 	//#endregion
 	// #region Methods
 	//#region Variable Accessors
@@ -35,8 +35,16 @@ public class InventoryManagementSystem {
 	{
 		Product item = new Product("Bieber Gnome",0001,10,7,4,15);
 		productCatalog.add(item);
-		item = new Product("Bieber Grenade",0001,10,7,4,15);
+		item = new Product("Bieber G",0001,10,7,4,15);
 		productCatalog.add(item);
+	}
+	/**
+	 * Adds a precreated product to the digital record
+	 * @param inProduct
+	 */
+	public static void addProduct(Product inProduct)
+	{
+		productCatalog.add(inProduct);
 	}
 	/**
 	 * Returns the ID of the lastSaleCreated
@@ -76,55 +84,53 @@ public class InventoryManagementSystem {
 	 */
 	static void GeneralAlert(String inTitle, String inMessage)
 	{
-		//TODO display alert message
 		JOptionPane.showMessageDialog(null, inMessage, "Alert: " + inTitle, JOptionPane.INFORMATION_MESSAGE);
 	}
-/**
- * Displays an alert informing the user that an invoice has come in and the listed products have had their stock increased	
- * @param inTitle
- * The title of the alert
- * @param inMessage
- * he message contained within the alert
- * @param inProducts
- * The list of products that have had their stock levels adjusted
- */
-static void StockIncreaseAlert(String inTitle, String inMessage, List<Product> inProducts)
-	{
-		String finalString = "";
-		for(int i = 0; i<inProducts.size();i++)
+	/**
+	 * Displays an alert informing the user that an invoice has come in and the listed products have had their stock increased	
+	 * @param inTitle
+	 * The title of the alert
+	 * @param inMessage
+	 * he message contained within the alert
+	 * @param inProducts
+	 * The list of products that have had their stock levels adjusted
+	 */
+	@SuppressWarnings("static-access") //Reason being that the custom size is required //TODO BadCode: solve static access warning
+	static void StockIncreaseAlert(String inTitle, String inMessage, List<ProductOrderLine> inProducts)
 		{
-			finalString += inProducts.get(i).ProductName()+"("+inProducts.get(i).productID()+(")");
-			finalString += "/n";
+			String finalString = "";
+			for(int i = 0; i<inProducts.size();i++)
+			{
+				finalString += inProducts.get(i).Product().ProductName()+"("+inProducts.get(i).Product().productID()+(")");
+				finalString += "/n";
+			}
+			JOptionPane pane = new JOptionPane();
+			pane.setSize(500, 200*inProducts.size());
+			pane.showMessageDialog(null,"Stock Recieved: " + finalString, "Stock Recieved", JOptionPane.INFORMATION_MESSAGE);
 		}
-		JOptionPane pane = new JOptionPane();
-		pane.setSize(500, 200*inProducts.size());
-		pane.showMessageDialog(null,"Stock Recieved: " + finalString, "Stock Recieved", JOptionPane.INFORMATION_MESSAGE);
-	}
-/**
- * Displays a message alerting the user to an error that has arisen	
- * @param inTitle
- * the title given to the error by the program
- * @param inLocation
- * the message set by the program detailing its location within the code
- * @param  inE
- * The actual error that has generated the alert
- */
-static void ErrorAlert(String inTitle, String inLocation, Exception inE)
-	{
-		//TODO display alert message#
-		
-		JOptionPane.showMessageDialog(null, inLocation + ": " + inE.getMessage(), "Error: " + inTitle, JOptionPane.ERROR_MESSAGE);
-	}
-/**
- * Displays a message alerting the users to low stock for a particular item	
- * @param inProductName
- * The products name
- * @param inProductID
- * the products unique ID
- */
-static void LowStockAlert(String inProductName, int inProductID)
-	{
-		JOptionPane.showMessageDialog(null, "Low Stock:" + inProductName + "(" + inProductID + ")","Low Stock",JOptionPane.WARNING_MESSAGE);
-	}
+	/**
+	 * Displays a message alerting the user to an error that has arisen	
+	 * @param inTitle
+	 * the title given to the error by the program
+	 * @param inLocation
+	 * the message set by the program detailing its location within the code
+	 * @param  inE
+	 * The actual error that has generated the alert
+	 */
+	static void ErrorAlert(String inTitle, String inLocation, Exception inE)
+		{			
+			JOptionPane.showMessageDialog(null, inLocation + ": " + inE.getMessage(), "Error: " + inTitle, JOptionPane.ERROR_MESSAGE);
+		}
+	/**
+	 * Displays a message alerting the users to low stock for a particular item	
+	 * @param inProductName
+	 * The products name
+	 * @param inProductID
+	 * the products unique ID
+	 */
+	static void LowStockAlert(String inProductName, int inProductID)
+		{
+			JOptionPane.showMessageDialog(null, "Low Stock:" + inProductName + "(" + inProductID + ")","Low Stock",JOptionPane.WARNING_MESSAGE);
+		}
 	//#endregion
 }

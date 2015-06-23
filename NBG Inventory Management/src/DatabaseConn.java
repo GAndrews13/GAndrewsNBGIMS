@@ -124,7 +124,14 @@ public class DatabaseConn {
 			InventoryManagementSystem.ErrorAlert("Database Record Creation Error", "DB03",e);
 		}
 	}
+	/**
+	 * Read a product from the database
+	 */
 	public void readProductEntry()
+	//TODO SQL UPDATE METHOD
+	//TODO SQL DELETE METHOD
+	//TODO SQL PRODUCT SPERCIFIC METHODS
+	//TABLE METHODS
 	{
 		Product tempProduct;
 		try
@@ -151,6 +158,7 @@ public class DatabaseConn {
 				int prodCurrentInOrder = results.getInt("currentInOrder");
 				
 				tempProduct = new Product(prodID, prodName, prodStock, prodReqStock, prodCriticalLevel, prodCost, prodLastPurchase, prodCurrentInOrder);
+				InventoryManagementSystem.addProduct(tempProduct);
 			}
 		}
 		catch (Exception e)

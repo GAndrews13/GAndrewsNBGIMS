@@ -8,13 +8,8 @@ import java.awt.BorderLayout;
 
 import javax.swing.JTable;
 import javax.swing.JMenuBar;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.JSplitPane;
 import javax.swing.JPopupMenu;
 import java.awt.Component;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import javax.swing.ListSelectionModel;
 import javax.swing.JTabbedPane;
 
 
@@ -57,7 +52,7 @@ public class Interface {
 		
 		JMenuBar menuBar = new JMenuBar();
 		frmNbGardensInventory.setJMenuBar(menuBar);
-		//TODO add functionality to menu's
+		//TODO UI: add functionality to menu's
 		//#region Manually control stock 
 		JMenu menu = new JMenu("Stock Control");
 		 menuBar.add(menu);
@@ -94,11 +89,8 @@ public class Interface {
 		 
 		 JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		 frmNbGardensInventory.getContentPane().add(tabbedPane, BorderLayout.CENTER);
-		 //TODO add tabs for invoices and stock order
+		 //TODO UI: add tabs for invoices and stock order
 		 // #endregion
 		
-	}
-
-	private static void addPopup(Component component, final JPopupMenu popup) {
 	}
 }
