@@ -1,10 +1,24 @@
 import java.util.List;
 import java.util.logging.*;
+import java.util.logging.Level.*;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 import javax.swing.JOptionPane;
 
+
 public class InventoryManagementSystem {
-// #region variables
+	public InventoryManagementSystem()
+	{
+		databaseConnection.readProductEntry();
+	}
+	
+	// #region variables
+	/**
+	 * Creates and retains the connection to the database aswell as methods involving the database
+	 */
+	private DatabaseConn databaseConnection = new DatabaseConn();
 	/**
 	 * The logger used to record all errors that occur within the InventoryManagementSystem.java runtime
 	 */
@@ -84,6 +98,7 @@ public class InventoryManagementSystem {
 	 */
 	static void GeneralAlert(String inTitle, String inMessage)
 	{
+		logger.log(Level.FINE, "General Alert: " + inTitle);
 		JOptionPane.showMessageDialog(null, inMessage, "Alert: " + inTitle, JOptionPane.INFORMATION_MESSAGE);
 	}
 	/**
@@ -95,7 +110,7 @@ public class InventoryManagementSystem {
 	 * @param inProducts
 	 * The list of products that have had their stock levels adjusted
 	 */
-	@SuppressWarnings("static-access") //Reason being that the custom size is required //TODO BadCode: solve static access warning
+	@SuppressWarnings("static-access") //Reason being that the custom size is required //FIXME solve static access warning
 	static void StockIncreaseAlert(String inTitle, String inMessage, List<ProductOrderLine> inProducts)
 		{
 			String finalString = "";
@@ -104,6 +119,7 @@ public class InventoryManagementSystem {
 				finalString += inProducts.get(i).Product().ProductName()+"("+inProducts.get(i).Product().productID()+(")");
 				finalString += "/n";
 			}
+			logger.log(Level.FINE, "Stock Increased: " + inTitle);
 			JOptionPane pane = new JOptionPane();
 			pane.setSize(500, 200*inProducts.size());
 			pane.showMessageDialog(null,"Stock Recieved: " + finalString, "Stock Recieved", JOptionPane.INFORMATION_MESSAGE);
@@ -118,9 +134,15 @@ public class InventoryManagementSystem {
 	 * The actual error that has generated the alert
 	 */
 	static void ErrorAlert(String inTitle, String inLocation, Exception inE)
-		{			
-			JOptionPane.showMessageDialog(null, inLocation + ": " + inE.getMessage(), "Error: " + inTitle, JOptionPane.ERROR_MESSAGE);
+		{	
+			logger.log(Level.WARNING, "Error Recived", inE);
+			JOptionPane.showMessageDialog(null, inLocation + ": " + inE.getMessage() + ": " + inE.getCause(), "Error: " + inTitle, JOptionPane.ERROR_MESSAGE);
 		}
+	static void ErrorAlert(String inTitle, String inLocation, Exception inE, Level inLevel)
+	{	
+		logger.log(inLevel, "Error Recived: "+ inLevel.getName(), inE);
+		JOptionPane.showMessageDialog(null, inLocation + ": " + inE.getMessage() + ": " + inE.getCause(), "Error: " + inTitle, JOptionPane.ERROR_MESSAGE);
+	}
 	/**
 	 * Displays a message alerting the users to low stock for a particular item	
 	 * @param inProductName
@@ -130,7 +152,19 @@ public class InventoryManagementSystem {
 	 */
 	static void LowStockAlert(String inProductName, int inProductID)
 		{
+			logger.log(Level.FINE, "Low Stock Reported: " + inProductName + "(" + inProductID + ")");
 			JOptionPane.showMessageDialog(null, "Low Stock:" + inProductName + "(" + inProductID + ")","Low Stock",JOptionPane.WARNING_MESSAGE);
 		}
+	/**
+	 * Returns the date and time (used in reporting errors and changes in the system)
+	 * @return
+	 */
+	static String DateTime()
+	{
+		Date date = new Date();
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/mm/dd HH:MM:SS");
+		return dateFormat.format(date);
+		
+	}
 	//#endregion
 }

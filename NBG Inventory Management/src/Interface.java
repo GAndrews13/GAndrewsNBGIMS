@@ -6,11 +6,9 @@ import javax.swing.JMenuItem;
 
 import java.awt.BorderLayout;
 
-import javax.swing.JTable;
 import javax.swing.JMenuBar;
-import javax.swing.JPopupMenu;
-import java.awt.Component;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 
 
 public class Interface {
@@ -22,7 +20,9 @@ public class Interface {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-
+		{
+			InventoryManagementSystem IMS = new InventoryManagementSystem();
+		}
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -52,7 +52,7 @@ public class Interface {
 		
 		JMenuBar menuBar = new JMenuBar();
 		frmNbGardensInventory.setJMenuBar(menuBar);
-		//TODO UI: add functionality to menu's
+		//UI add functionality to menu's
 		//#region Manually control stock 
 		JMenu menu = new JMenu("Stock Control");
 		 menuBar.add(menu);
@@ -89,8 +89,13 @@ public class Interface {
 		 
 		 JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		 frmNbGardensInventory.getContentPane().add(tabbedPane, BorderLayout.CENTER);
-		 //TODO UI: add tabs for invoices and stock order
+		//UI add tabs for invoices and stock order
+		 //#region Data View Tab
+		 table = new JTable();
+		 tabbedPane.addTab("DataView", null, table, null);
 		 // #endregion
+		 //#endregion
 		
 	}
 }
+	

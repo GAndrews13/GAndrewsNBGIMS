@@ -29,7 +29,6 @@ public class ProductInvoice extends ProductOrder
 		{
 			super.ProductsOrdered().get(i).Product().IncreaseStockLevel(super.ProductsOrdered().get(i).Quantity());
 		}
-		//TODO Product: Change Stock Levels	
 		Alert();
 	}
 }

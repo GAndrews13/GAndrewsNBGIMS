@@ -71,7 +71,7 @@ public class ProductOrderLine
 	 */
 	private void RemoveProduct()
 	{
-		//TODO BadCode: CHANGE
+		//FIXME BadCode: CHANGE
 		productID = null;
 	}
 	/**

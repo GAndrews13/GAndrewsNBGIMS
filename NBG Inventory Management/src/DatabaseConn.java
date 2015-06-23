@@ -1,7 +1,11 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.Statement; 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+//TODO Logging
 
 
 public class DatabaseConn {
@@ -44,11 +48,12 @@ public class DatabaseConn {
 	/**
 	 * The connection used in order to link the program with the database
 	 */
-	static Connection conn = null;
+	static Connection conn;
 	/**
 	 * The statement that contains the SQL that you wish to submit to the server
 	 */
-	static Statement statement = null;
+	static Statement statement;
+	private static Logger logger = Logger.getLogger(DatabaseConn.class.getName());
 	//#endregion
 	//#region Methods
 	//#region Variable Methods
@@ -79,15 +84,19 @@ public class DatabaseConn {
 	 */
 	public void createConnection()
 	{
+		logger.entering(getClass().getName(),"Entering Create Connection Method : " + InventoryManagementSystem.DateTime());
 		try
 		{
 			Class.forName(databaseDriver);
-			DriverManager.getConnection(databaseURL,user,password);
+			conn = DriverManager.getConnection(databaseURL,user,password);
+			//Remove
+			System.out.println("Connection To Datebase Complete");
 		}
 		catch (Exception e)
 		{
-			InventoryManagementSystem.ErrorAlert("Database Connection Error", "DBC01", e);
+			InventoryManagementSystem.ErrorAlert("Database Connection Error", "DBC019", e, Level.SEVERE);
 		}
+		logger.exiting(getClass().getName(), "Leaving create Connection Method : " + InventoryManagementSystem.DateTime());
 	}
 	/**
 	 * Sends a SQL request to the database to create a record of the given product
@@ -128,10 +137,6 @@ public class DatabaseConn {
 	 * Read a product from the database
 	 */
 	public void readProductEntry()
-	//TODO SQL UPDATE METHOD
-	//TODO SQL DELETE METHOD
-	//TODO SQL PRODUCT SPERCIFIC METHODS
-	//TABLE METHODS
 	{
 		Product tempProduct;
 		try
@@ -140,7 +145,7 @@ public class DatabaseConn {
 		}
 		catch (Exception e)
 		{
-			InventoryManagementSystem.ErrorAlert("Database Record Read Error", "DB04",e);
+			InventoryManagementSystem.ErrorAlert("Database Record Read Error", "DB04",e, Level.SEVERE);
 		}
 		String defaultString = "SELECT ProductID, Product Name, Stock, Requried Stock, Critical Level, Cost, sinceLastPurchase, currentInOrder";
 		try
@@ -148,6 +153,7 @@ public class DatabaseConn {
 			ResultSet results = statement.executeQuery(defaultString);
 			while(results.next())
 			{
+				//FIXME Error with retriving product information
 				int prodID = results.getInt("ProductID");
 				String prodName = results.getString("Product Name");
 				int prodStock = results.getInt("Stock");
@@ -159,12 +165,18 @@ public class DatabaseConn {
 				
 				tempProduct = new Product(prodID, prodName, prodStock, prodReqStock, prodCriticalLevel, prodCost, prodLastPurchase, prodCurrentInOrder);
 				InventoryManagementSystem.addProduct(tempProduct);
+				//Remove
+				System.out.println("Product Created: " + prodName);
 			}
 		}
 		catch (Exception e)
 		{
-			InventoryManagementSystem.ErrorAlert("Database Record Read Error", "DB05",e);
+			InventoryManagementSystem.ErrorAlert("Database Record Read Error", "DB05",e, Level.SEVERE);
 		}
 	}
+	//SQL UPDATE METHOD
+	//SQL DELETE METHOD
+	//SQL PRODUCT SPERCIFIC METHODS
+	//UI TABLE METHODS
 	//#endregion
 }
