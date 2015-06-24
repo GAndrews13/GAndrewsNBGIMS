@@ -223,5 +223,12 @@ public class Product {
 	{
 		InventoryManagementSystem.LowStockAlert(productName, productID);
 	}
+	/**
+	 * Writes out the products information to the system (DEBUG CODE)
+	 */
+	public void SystemWrite()
+	{
+		System.out.println(String.format("%d: %d: %d: %d: %d",productName,productID,productStock));
+	}
 	// #endregion
 }

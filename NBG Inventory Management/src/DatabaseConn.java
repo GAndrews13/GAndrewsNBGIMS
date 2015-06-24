@@ -1,6 +1,7 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement; 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -89,7 +90,6 @@ public class DatabaseConn {
 		{
 			Class.forName(databaseDriver);
 			conn = DriverManager.getConnection(databaseURL,user,password);
-			//Remove
 			System.out.println("Connection To Datebase Complete");
 		}
 		catch (Exception e)
@@ -114,7 +114,7 @@ public class DatabaseConn {
 			InventoryManagementSystem.ErrorAlert("Database Record Creation Error", "DB02",e);
 		}
 		String defaultString = String.format(
-				"INSERT INTO %d VALUES (%d,%d,%d,%d,%d,%d,%d,%d)",
+				"INSERT INTO Product VALUES (%d,%d,%d,%d,%d,%d,%d,%d)",
 				inProduct.productID(),
 				inProduct.ProductName(),
 				inProduct.ProductStock(),
@@ -147,32 +147,63 @@ public class DatabaseConn {
 		{
 			InventoryManagementSystem.ErrorAlert("Database Record Read Error", "DB04",e, Level.SEVERE);
 		}
-		String defaultString = "SELECT ProductID, Product Name, Stock, Requried Stock, Critical Level, Cost, sinceLastPurchase, currentInOrder";
+		String defaultString = "SELECT ProductID, ProductName, Stock, RequiredStock, CriticalLevel, Cost, sinceLastPurchase, currentInOrder FROM Product";
 		try
 		{
 			ResultSet results = statement.executeQuery(defaultString);
+			System.out.println("test");
 			while(results.next())
 			{
-				//FIXME Error with retriving product information
+				//FIXME this code is not running
+				System.out.println("test 2");
 				int prodID = results.getInt("ProductID");
-				String prodName = results.getString("Product Name");
+				String prodName = results.getString("ProductName");
 				int prodStock = results.getInt("Stock");
-				int prodReqStock = results.getInt("Required Stock");
-				int prodCriticalLevel = results.getInt("Critical Level");
+				int prodReqStock = results.getInt("RequiredStock");
+				int prodCriticalLevel = results.getInt("CriticalLevel");
 				int prodCost = results.getInt("Cost");
 				int prodLastPurchase = results.getInt("sinceLastPurchase");
 				int prodCurrentInOrder = results.getInt("currentInOrder");
 				
 				tempProduct = new Product(prodID, prodName, prodStock, prodReqStock, prodCriticalLevel, prodCost, prodLastPurchase, prodCurrentInOrder);
+				//Debug code to print product info
+				tempProduct.SystemWrite();
 				InventoryManagementSystem.addProduct(tempProduct);
-				//Remove
-				System.out.println("Product Created: " + prodName);
 			}
 		}
 		catch (Exception e)
 		{
 			InventoryManagementSystem.ErrorAlert("Database Record Read Error", "DB05",e, Level.SEVERE);
 		}
+	}
+	/**
+	 * Close the connection to the database
+	 */
+	public void closeConnection()
+	{
+		try
+		{
+			conn.close();
+			System.out.println("Connection To Database Closed");
+		}
+		catch (SQLException e)
+		{
+			InventoryManagementSystem.ErrorAlert("Cannot disconnect from database","DB06" , e, Level.SEVERE);
+		}
+		try
+		{
+
+			if(conn != null)
+			{
+				conn.close();
+				System.out.println("Connection To Database Closed");
+			}	
+		}
+		catch (Exception e)
+		{
+			InventoryManagementSystem.ErrorAlert("Cannot disconnect from database","DB07" , e, Level.SEVERE);
+		}
+		
 	}
 	//SQL UPDATE METHOD
 	//SQL DELETE METHOD

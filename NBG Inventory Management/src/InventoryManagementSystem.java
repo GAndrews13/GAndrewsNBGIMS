@@ -12,6 +12,7 @@ public class InventoryManagementSystem {
 	public InventoryManagementSystem()
 	{
 		databaseConnection.readProductEntry();
+		databaseConnection.closeConnection();
 	}
 	
 	// #region variables
