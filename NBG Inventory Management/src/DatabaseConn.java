@@ -113,20 +113,15 @@ public class DatabaseConn {
 		{
 			InventoryManagementSystem.ErrorAlert("Database Record Creation Error", "DB02",e);
 		}
-		String defaultString = String.format(
-				"INSERT INTO Product VALUES (%d,%d,%d,%d,%d,%d,%d,%d)",
-				inProduct.productID(),
-				inProduct.ProductName(),
-				inProduct.ProductStock(),
-				inProduct.RequiredStock(),
-				inProduct.CriticalLevel(),
-				inProduct.ProductCost(),
-				inProduct.stockChangeSinceLastReport(),
-				inProduct.CurrentInOrder()
-				);
+		//FIXME Find source of error
+		//String defaultString = String.format("INSERT INTO product (productID,productName,productStock,requiredStock,criticalLevel,productCost,stockChangeSinceLastReport,currentInOrder) VALUES (%s,'%s',%s,%s,%s,%s,%s,%s.%s)", inProduct.productID(), inProduct.ProductName(), inProduct.ProductStock(),	inProduct.RequiredStock(),	inProduct.CriticalLevel(),	inProduct.ProductCost(), inProduct.stockChangeSinceLastReport(), inProduct.CurrentInOrder());
+		String defaultString = "INSERT INTO product VALUE (" + inProduct.productID()+ ", " +inProduct.ProductName() + ", " + inProduct.ProductStock() + ", " + inProduct.RequiredStock() + ", " + inProduct.CriticalLevel()+ ", " + inProduct.ProductCost() + ", " + inProduct.stockChangeSinceLastReport() + inProduct.CurrentInOrder() + ")";
+		
+		System.out.println(defaultString);
 		try
 		{
 			statement.executeUpdate(defaultString);
+			System.out.println("Product Created");
 		}
 		catch (Exception e)
 		{

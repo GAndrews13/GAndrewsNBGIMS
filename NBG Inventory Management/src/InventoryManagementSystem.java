@@ -11,6 +11,8 @@ import javax.swing.JOptionPane;
 public class InventoryManagementSystem {
 	public InventoryManagementSystem()
 	{
+		Product tempProduct = new Product("Machine Gunner Gnome", 0, 13, 13, 11, 1000);
+		databaseConnection.CreateProductEntry(tempProduct);
 		databaseConnection.readProductEntry();
 		databaseConnection.closeConnection();
 	}
