@@ -228,7 +228,9 @@ public class Product {
 	 */
 	public void SystemWrite()
 	{
-		System.out.println(String.format("%d: %d: %d: %d: %d",productName,productID,productStock));
+		System.out.println(productName + " : " + productID + " : " + productStock);
+		//Remove
+		//System.out.println(String.format("%d: %d: %d: %d: %d",productName,productID,productStock));
 	}
 	// #endregion
 }

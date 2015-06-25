@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.*;
 import java.util.logging.Level.*;
@@ -11,7 +12,7 @@ import javax.swing.JOptionPane;
 public class InventoryManagementSystem {
 	public InventoryManagementSystem()
 	{
-		Product tempProduct = new Product("Machine Gunner Gnome", 0, 13, 13, 11, 1000);
+		Product tempProduct = new Product(DateTime(), 0, 13, 13, 11, 1000);
 		databaseConnection.CreateProductEntry(tempProduct);
 		databaseConnection.readProductEntry();
 		databaseConnection.closeConnection();
@@ -41,26 +42,17 @@ public class InventoryManagementSystem {
 	/**
 	 * The array of products stored within the system
 	 */
-	private static List<Product> productCatalog;
+	private static List<Product> productCatalog = new ArrayList<Product>();
 	//#endregion
 	// #region Methods
 	//#region Variable Accessors
-	/**
-	 * Allows you to add a new product
-	 */
-	public void addProduct()
-	{
-		Product item = new Product("Bieber Gnome",0001,10,7,4,15);
-		productCatalog.add(item);
-		item = new Product("Bieber G",0001,10,7,4,15);
-		productCatalog.add(item);
-	}
-	/**
+		/**
 	 * Adds a precreated product to the digital record
 	 * @param inProduct
 	 */
 	public static void addProduct(Product inProduct)
 	{
+		//FIXME error
 		productCatalog.add(inProduct);
 	}
 	/**

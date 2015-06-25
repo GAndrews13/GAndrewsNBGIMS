@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 
 
 public class DatabaseConn {
-	//#region Constructors
+	// #region Constructors
 	/**
 	 * Blank Constructor to manipulate 
 	 */
@@ -113,9 +113,8 @@ public class DatabaseConn {
 		{
 			InventoryManagementSystem.ErrorAlert("Database Record Creation Error", "DB02",e);
 		}
-		//FIXME Find source of error
-		//String defaultString = String.format("INSERT INTO product (productID,productName,productStock,requiredStock,criticalLevel,productCost,stockChangeSinceLastReport,currentInOrder) VALUES (%s,'%s',%s,%s,%s,%s,%s,%s.%s)", inProduct.productID(), inProduct.ProductName(), inProduct.ProductStock(),	inProduct.RequiredStock(),	inProduct.CriticalLevel(),	inProduct.ProductCost(), inProduct.stockChangeSinceLastReport(), inProduct.CurrentInOrder());
-		String defaultString = "INSERT INTO product VALUE (" + inProduct.productID()+ ", " +inProduct.ProductName() + ", " + inProduct.ProductStock() + ", " + inProduct.RequiredStock() + ", " + inProduct.CriticalLevel()+ ", " + inProduct.ProductCost() + ", " + inProduct.stockChangeSinceLastReport() + inProduct.CurrentInOrder() + ")";
+		//String defaultString = String.format("INSERT INTO product (productID,productName,productStock,requiredStock,criticalLevel,productCost,stockChangeSinceLastReport,currentInOrder) VALUES (%d,'%d',%d,%d,%d,%d,%d,%d.%d)", inProduct.productID(), inProduct.ProductName(), inProduct.ProductStock(),	inProduct.RequiredStock(),	inProduct.CriticalLevel(),	inProduct.ProductCost(), inProduct.stockChangeSinceLastReport(), inProduct.CurrentInOrder());
+		String defaultString = "INSERT INTO product VALUE (" + inProduct.productID()+ ", '" +inProduct.ProductName() + "', " + inProduct.ProductStock() + ", " + inProduct.RequiredStock() + ", " + inProduct.CriticalLevel()+ ", " + inProduct.ProductCost() + ", " + inProduct.stockChangeSinceLastReport() + ", " + inProduct.CurrentInOrder() + ", " + "0 )";
 		
 		System.out.println(defaultString);
 		try
@@ -163,6 +162,7 @@ public class DatabaseConn {
 				tempProduct = new Product(prodID, prodName, prodStock, prodReqStock, prodCriticalLevel, prodCost, prodLastPurchase, prodCurrentInOrder);
 				//Debug code to print product info
 				tempProduct.SystemWrite();
+				//FIXME help
 				InventoryManagementSystem.addProduct(tempProduct);
 			}
 		}
