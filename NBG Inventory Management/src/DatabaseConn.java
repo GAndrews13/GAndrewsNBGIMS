@@ -7,8 +7,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 //TODO Logging
-
-
 public class DatabaseConn {
 	// #region Constructors
 	/**
@@ -17,6 +15,7 @@ public class DatabaseConn {
 	public DatabaseConn()
 	{
 		createConnection();
+		closeConnection();
 	}
 	/**
 	 * Create a database class with a custom connection
@@ -105,6 +104,7 @@ public class DatabaseConn {
 	 */
 	public void CreateProductEntry(Product inProduct)
 	{
+		createConnection();
 		try
 		{
 			statement = conn.createStatement();
@@ -113,25 +113,29 @@ public class DatabaseConn {
 		{
 			InventoryManagementSystem.ErrorAlert("Database Record Creation Error", "DB02",e);
 		}
-		//String defaultString = String.format("INSERT INTO product (productID,productName,productStock,requiredStock,criticalLevel,productCost,stockChangeSinceLastReport,currentInOrder) VALUES (%d,'%d',%d,%d,%d,%d,%d,%d.%d)", inProduct.productID(), inProduct.ProductName(), inProduct.ProductStock(),	inProduct.RequiredStock(),	inProduct.CriticalLevel(),	inProduct.ProductCost(), inProduct.stockChangeSinceLastReport(), inProduct.CurrentInOrder());
-		String defaultString = "INSERT INTO product VALUE (" + inProduct.productID()+ ", '" +inProduct.ProductName() + "', " + inProduct.ProductStock() + ", " + inProduct.RequiredStock() + ", " + inProduct.CriticalLevel()+ ", " + inProduct.ProductCost() + ", " + inProduct.stockChangeSinceLastReport() + ", " + inProduct.CurrentInOrder() + ", " + "0 )";
-		
-		System.out.println(defaultString);
+		int productID = inProduct.productID();
+		//Check if the product ID is available, if it isn't then assign it a new product ID//TODO expand
+		if(productID <= InventoryManagementSystem.CatalogCount())
+		{
+			productID = InventoryManagementSystem.CatalogCount()+1;
+		}
+		String defaultString = "INSERT INTO product VALUE (" + productID+ ", '" +inProduct.ProductName() + "', " + inProduct.ProductStock() + ", " + inProduct.RequiredStock() + ", " + inProduct.CriticalLevel()+ ", " + inProduct.ProductCost() + ", " + inProduct.stockChangeSinceLastReport() + ", " + inProduct.CurrentInOrder() + ", " + "0 )";
 		try
 		{
 			statement.executeUpdate(defaultString);
-			System.out.println("Product Created");
 		}
 		catch (Exception e)
 		{
 			InventoryManagementSystem.ErrorAlert("Database Record Creation Error", "DB03",e);
 		}
+		closeConnection();
 	}
 	/**
 	 * Read a product from the database
 	 */
 	public void readProductEntry()
 	{
+		createConnection();
 		Product tempProduct;
 		try
 		{
@@ -170,6 +174,7 @@ public class DatabaseConn {
 		{
 			InventoryManagementSystem.ErrorAlert("Database Record Read Error", "DB05",e, Level.SEVERE);
 		}
+		closeConnection();
 	}
 	/**
 	 * Close the connection to the database
@@ -187,7 +192,6 @@ public class DatabaseConn {
 		}
 		try
 		{
-
 			if(conn != null)
 			{
 				conn.close();
@@ -201,7 +205,90 @@ public class DatabaseConn {
 		
 	}
 	//SQL UPDATE METHOD
+	/**
+	 * Allows the edited version of a product to be saved into the database 
+	 * @param inProduct
+	 * The product which has been edited from the database variation
+	 */
+	public void UpdateProduct(Product inProduct)
+	{
+		try
+		{
+			String updateString = String.format(
+					"ProductName=\"%s\",Stock=%s,RequiredStock=%s,CriticalLevel=%s,Cost=%s,sinceLastPurchase=%s,currentInOrder=%s",
+					inProduct.ProductName(),
+					inProduct.ProductStock(),
+					inProduct.RequiredStock(),
+					inProduct.CriticalLevel(),
+					inProduct.ProductCost(),
+					inProduct.stockChangeSinceLastReport(),
+					inProduct.CurrentInOrder()					
+					);
+			String updateConditions = "productID = " + Integer.toString(inProduct.productID());
+			UpdateSQL("product",updateString, updateConditions);
+			//TODO variable length update statements
+		}
+		catch (Exception e)
+		{
+			InventoryManagementSystem.ErrorAlert("Cannot update product", "SQLU002", e, Level.SEVERE);
+		}
+	}
+	/**
+	 * Generate update method formatting for SQL update requests
+	 * @param inTable
+	 * @param inObject
+	 */
+	private void UpdateSQL(String inTable, String inRequest, String inCondition)
+	{
+		createConnection();
+		try
+		{
+			statement = conn.createStatement();
+			String updateString = String.format("UPDATE %s SET %s WHERE %s; ", inTable, inRequest, inCondition);
+			statement.executeUpdate(updateString);
+		}
+		catch (Exception e)
+		{
+			InventoryManagementSystem.ErrorAlert("Update Error", "SQLU001", e, Level.SEVERE);
+		}
+		closeConnection();
+	}
 	//SQL DELETE METHOD
+	/**
+	 * Allows you to delete a product from the catalogue
+	 */
+	public void DeleteProduct()
+	{
+		try
+		{
+			String updateString = String.format(
+					"ProductName=\"%s\",Stock=%s,RequiredStock=%s,CriticalLevel=%s,Cost=%s,sinceLastPurchase=%s,currentInOrder=%s",
+					inProduct.ProductName(),
+					inProduct.ProductStock(),
+					inProduct.RequiredStock(),
+					inProduct.CriticalLevel(),
+					inProduct.ProductCost(),
+					inProduct.stockChangeSinceLastReport(),
+					inProduct.CurrentInOrder()					
+					);
+			String updateConditions = "productID = " + Integer.toString(inProduct.productID());
+			UpdateSQL("product",updateString, updateConditions);
+			//TODO variable length update statements
+		}
+		catch (Exception e)
+		{
+			InventoryManagementSystem.ErrorAlert("Cannot update product", "SQLU002", e, Level.SEVERE);
+		}
+	}
+	/**
+	 * General SQL compiler for delete methods
+	 */
+	private void DeleteItem()
+	{
+		//TODO
+		createConnection();
+		closeConnection();
+	}
 	//SQL PRODUCT SPERCIFIC METHODS
 	//UI TABLE METHODS
 	//#endregion

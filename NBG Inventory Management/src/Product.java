@@ -226,10 +226,11 @@ public class Product {
 	/**
 	 * Writes out the products information to the system (DEBUG CODE)
 	 */
+	//Remove
 	public void SystemWrite()
 	{
 		System.out.println(productName + " : " + productID + " : " + productStock);
-		//Remove
+		
 		//System.out.println(String.format("%d: %d: %d: %d: %d",productName,productID,productStock));
 	}
 	// #endregion

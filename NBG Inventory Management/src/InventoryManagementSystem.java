@@ -3,6 +3,7 @@ import java.util.List;
 import java.util.logging.*;
 import java.util.logging.Level.*;
 import java.util.Date;
+import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -12,10 +13,13 @@ import javax.swing.JOptionPane;
 public class InventoryManagementSystem {
 	public InventoryManagementSystem()
 	{
-		Product tempProduct = new Product(DateTime(), 0, 13, 13, 11, 1000);
-		databaseConnection.CreateProductEntry(tempProduct);
+		//Remove
+		Product tempProduct = new Product(DateTime(), 1, 13, 13, 11, 1000);
 		databaseConnection.readProductEntry();
-		databaseConnection.closeConnection();
+		//databaseConnection.CreateProductEntry(tempProduct);
+		tempProduct.ProductName(DateTime());
+		databaseConnection.UpdateProduct(tempProduct);
+		writeToTxt();
 	}
 	
 	// #region variables
@@ -43,9 +47,29 @@ public class InventoryManagementSystem {
 	 * The array of products stored within the system
 	 */
 	private static List<Product> productCatalog = new ArrayList<Product>();
+	/**
+	 * the directory in which all reports are being exported to by default
+	 */
+	private String reportDirectory = "C:/Workspace/ProductReports/";
 	//#endregion
 	// #region Methods
 	//#region Variable Accessors
+	/**
+	 * Allows you to change the directory of generated stock reports
+	 * @param inString
+	 */
+	public void ReportDirectory(String inString)
+	{
+		reportDirectory = inString;
+	}
+	/**
+	 * The Directory which automatically generated reports are saved
+	 * @return
+	 */
+	public String ReportDirectory()
+	{
+		return reportDirectory;
+	}
 		/**
 	 * Adds a precreated product to the digital record
 	 * @param inProduct
@@ -128,11 +152,57 @@ public class InventoryManagementSystem {
 	 * @param  inE
 	 * The actual error that has generated the alert
 	 */
+	static public int CatalogCount() 
+	{
+		return productCatalog.size();
+	}
 	static void ErrorAlert(String inTitle, String inLocation, Exception inE)
 		{	
 			logger.log(Level.WARNING, "Error Recived", inE);
 			JOptionPane.showMessageDialog(null, inLocation + ": " + inE.getMessage() + ": " + inE.getCause(), "Error: " + inTitle, JOptionPane.ERROR_MESSAGE);
 		}
+	/**
+	 * Retrives the id of the last sale order created
+	 * @return
+	 */
+	public int getLastSaleCreated() {
+		return lastSaleCreated;
+	}
+	/**
+	 * sets the last sale order ID
+	 * @param lastSaleCreated
+	 */
+	public void setLastSaleCreated(int lastSaleCreated) {
+		this.lastSaleCreated = lastSaleCreated;
+	}
+	/**
+	 * Returns the last product invoice order ID
+	 * @return
+	 */
+	public int getLastInvoiceCreated() {
+		return lastInvoiceCreated;
+	}
+	/**
+	 * Allows you to set the last invoice id that was used
+	 * @param lastInvoiceCreated
+	 */
+	public void setLastInvoiceCreated(int lastInvoiceCreated) {
+		this.lastInvoiceCreated = lastInvoiceCreated;
+	}
+	/**
+	 * returns the last orderline item ID that was used
+	 * @return
+	 */
+	public int getLastOrderLineCreated() {
+		return lastOrderLineCreated;
+	}
+	/**
+	 * sets the last order line created ID
+	 * @param lastOrderLineCreated
+	 */
+	public void setLastOrderLineCreated(int lastOrderLineCreated) {
+		this.lastOrderLineCreated = lastOrderLineCreated;
+	}
 	static void ErrorAlert(String inTitle, String inLocation, Exception inE, Level inLevel)
 	{	
 		logger.log(inLevel, "Error Recived: "+ inLevel.getName(), inE);
@@ -159,6 +229,71 @@ public class InventoryManagementSystem {
 		Date date = new Date();
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/mm/dd HH:MM:SS");
 		return dateFormat.format(date);
+		
+	}
+	/**
+	 * Returns a useable datetime for file name
+	 */
+	public String FileNameGenerator()
+	{
+		String tempDate = DateTime();
+		tempDate = tempDate.replace('/', '-');
+		tempDate = tempDate.replace(':', '-');
+		String temp =reportDirectory+ "ProductReport " + tempDate + ".txt" ;
+		return temp;
+	}
+/**
+	 * Writes out the products stored into a text file
+	 */
+	public void writeToTxt()
+	{
+		PrintWriter writer = null;
+		try
+		{
+			writer = new PrintWriter(FileNameGenerator(), "UTF-8");
+			try
+			{
+				
+				writer.println("<StartOfReport>");
+				writer.println("<DateTime: " +DateTime()+">");
+				for(int i = 0; i<productCatalog.size();i++)
+				{
+					writer.println(String.format(
+							"Product ID: (%s) Product Name: (%s) Current Stock: (%s) Recommended Stock Level: (%s) Critical Stock Level: (%s) Product Cost: (%s)", 
+							productCatalog.get(i).productID(),
+							productCatalog.get(i).ProductName(),
+							productCatalog.get(i).ProductStock(),
+							productCatalog.get(i).RequiredStock(),
+							productCatalog.get(i).CriticalLevel(),
+							productCatalog.get(i).ProductCost()
+							));
+					writer.flush();
+				}
+				writer.println("<EndOfReport>");
+			}
+			catch (Exception e)
+			{
+				InventoryManagementSystem.ErrorAlert("Error Writing To Report File", "WTT02", e, Level.WARNING);
+			}
+			finally
+			{
+				if(writer!=null)
+				{
+					writer.close();
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			InventoryManagementSystem.ErrorAlert("Error Writing Report File", "WTT01", e, Level.SEVERE);
+		}
+		finally
+		{
+			if(writer!= null)
+			{
+				writer.close();
+			}
+		}
 		
 	}
 	//#endregion
