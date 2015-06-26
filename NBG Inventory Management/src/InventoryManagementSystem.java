@@ -50,7 +50,7 @@ public class InventoryManagementSystem {
 	/**
 	 * the directory in which all reports are being exported to by default
 	 */
-	private String reportDirectory = "C:/Workspace/ProductReports/";
+	private String reportDirectory = "C:/Users/gandrews/workspace/GandrewsNBGIMS";
 	//#endregion
 	// #region Methods
 	//#region Variable Accessors

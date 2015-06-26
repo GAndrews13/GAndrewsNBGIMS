@@ -257,7 +257,7 @@ public class DatabaseConn {
 	/**
 	 * Allows you to delete a product from the catalogue
 	 */
-	public void DeleteProduct()
+	public void DeleteProduct(Product inProduct)
 	{
 		try
 		{
