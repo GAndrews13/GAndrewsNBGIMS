@@ -209,14 +209,15 @@ public class Interface {
 	/**
 	 * Refreshes the data in the table from the IMS database 
 	 */
-	public void refreshTable()
+	public static void refreshTable()
 	{
 		//TODO Currently removes only odd entries
 		//Remove all current entries in the program
-		for(int i = 0; i <tModel.getRowCount();i++)
+		/*for(int i = 0; i <tModel.getRowCount();i++)
 		{
 			tModel.removeRow(i);
-		}
+		}*/
+		tModel = new DefaultTableModel();
 		//Load all products from the database
 		IMS.DatabaseLoad();
 		//Refresh the table with the new items

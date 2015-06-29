@@ -396,13 +396,31 @@ public class InventoryManagementSystem {
 			{
 				if(productCatalog.get(i).productID() == (int)inObject[0])
 				{
-					//TODO cast objects to integer types
-					Product tempProduct = new Product((Integer)inObject[0], (String)inObject[1], (Integer)inObject[2], (Integer)inObject[3], (Integer)inObject[4], (Integer)inObject[5], (Integer)inObject[6], (Integer)inObject[7]);
-					Product initialProduct = productCatalog.get(i);
-					//Remove
-					System.out.println("Product Changed: " + initialProduct.ProductName());
-					
-					productCatalog.set(i, tempProduct);
+					int tempID = 0, tempStock = 0, tempReq = 0, tempCrit = 0, tempCost = 0, tempSLP = 0, tempCIO = 0;
+					String tempName = "";
+					//FIXME cast objects to integer types
+					try
+					{
+						tempID = (Integer)inObject[0];
+						tempName = (String)inObject[1];
+						tempStock = (Integer)inObject[3];
+						tempReq = (Integer)inObject[4];
+						tempCrit = (Integer)inObject[5];
+						tempCost = (Integer)inObject[5];
+						tempSLP = (Integer)inObject[6];
+						tempCIO = (Integer)inObject[7];
+						
+						
+						Product tempProduct = new Product(tempID, tempName, tempStock, tempReq, tempCrit, tempCost, tempSLP, tempCIO);
+						Product initialProduct = productCatalog.get(i);
+						//Remove
+						System.out.println("Product Changed: " + initialProduct.ProductName());
+						productCatalog.set(i, tempProduct);
+					}
+					catch (Exception e)
+					{
+						JOptionPane.showMessageDialog(null,"Value's entered are not of the correct type","Incorrect Value Entered", JOptionPane.ERROR_MESSAGE);
+					}
 				}
 			}
 			catch (Exception e)
