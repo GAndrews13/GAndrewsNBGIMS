@@ -13,13 +13,12 @@ import javax.swing.JOptionPane;
 public class InventoryManagementSystem {
 	public InventoryManagementSystem()
 	{
-		//Remove
 		//Product tempProduct = new Product(DateTime(), 1, 13, 13, 11, 1000);
 		databaseConnection.readProductEntry();
 		//databaseConnection.CreateProductEntry(tempProduct);
 		//tempProduct.ProductName(DateTime());
 		//databaseConnection.UpdateProduct(tempProduct);
-		writeToTxt();
+		//writeToTxt();
 	}
 	
 	// #region variables
@@ -369,7 +368,7 @@ public class InventoryManagementSystem {
 							changeInStockRequired,changeInStockCost
 							));
 				}
-				//TODO finance changer (100=1£ ext..)
+				//Possible finance changer (100=1£ ext..)
 				pw.println("Total Cost: " + totalCost);
 				pw.println("End of Product Order Form");
 				pw.flush();
@@ -389,23 +388,28 @@ public class InventoryManagementSystem {
 	/**
 	 * Update a product based on the Object array passed
 	 */
-	public void updateProduct(Object[] inObject)
+	public static void updateProduct(Object[] inObject)
 	{
 		for(int i  = 0; i<productCatalog.size();i++)
 		{
-			if(productCatalog.get(i).productID() == (int)inObject[0])
+			try
 			{
-				Product tempProduct = new Product((int) inObject[0], (String)inObject[1], (int) inObject[2], (int) inObject[3], (int) inObject[4], (int) inObject[5], (int) inObject[6], (int) inObject[7]);
-				Product initialProduct = productCatalog.get(i);
-				productComparison(initialProduct, tempProduct);
-				
-				productCatalog.set(i, tempProduct);
+				if(productCatalog.get(i).productID() == (int)inObject[0])
+				{
+					//TODO cast objects to integer types
+					Product tempProduct = new Product((Integer)inObject[0], (String)inObject[1], (Integer)inObject[2], (Integer)inObject[3], (Integer)inObject[4], (Integer)inObject[5], (Integer)inObject[6], (Integer)inObject[7]);
+					Product initialProduct = productCatalog.get(i);
+					//Remove
+					System.out.println("Product Changed: " + initialProduct.ProductName());
+					
+					productCatalog.set(i, tempProduct);
+				}
+			}
+			catch (Exception e)
+			{
+				InventoryManagementSystem.ErrorAlert("Error Updating Products", "IMSUP001", e, Level.WARNING);
 			}
 		}
-	}
-	private void productComparison(Product inOriginal, Product inChanged)
-	{
-		//TODO execute changes
 	}
 	//#endregion
 }

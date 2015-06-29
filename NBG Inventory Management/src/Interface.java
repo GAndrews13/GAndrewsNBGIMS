@@ -25,17 +25,16 @@ import java.util.logging.Level;
 public class Interface {
 
 	private JFrame frmNbGardensInventory;
-	private JTable table_1;
+	private static JTable table_1;
 	private JScrollPane scrollPane_1;
 	static InventoryManagementSystem IMS;
-	private DefaultTableModel tModel;
-	private TableModelListener tMListern;
+	private static DefaultTableModel tModel;
 	private ActionListener actionListener = new ActionListener(){
 
 		@Override
 		//#region Listener
 		/**
-		 * When a button is pressed on the UI calls the appropiate method
+		 * When a button is pressed on the User Interface calls the appropiate method
 		 * @param arg0
 		 */
 		public void actionPerformed(ActionEvent arg0) 
@@ -108,7 +107,6 @@ public class Interface {
 		
 		JMenuBar menuBar = new JMenuBar();
 		frmNbGardensInventory.setJMenuBar(menuBar);
-		//UI add functionality to menu's
 		//#region Manually control stock 
 		JMenu menu = new JMenu("Stock Control");
 		 menuBar.add(menu);
@@ -161,14 +159,37 @@ public class Interface {
 		 String[] columnNames = {"ProductID","ProductName", "Stock", "Required Stock", "Critical Level", "Cost", "Since Last Review", "Current In Order"};
 		 String[][]blankTable = new String[0][8];
 		 tModel = new DefaultTableModel(blankTable,columnNames);
-		 //Add a listener for changes in the cells
-		 tModel.addTableModelListener(tMListern);
 		 table_1 = new JTable(tModel);
-		 scrollPane = new JScrollPane(table_1);
-		 frmNbGardensInventory.getContentPane().add(scrollPane, BorderLayout.CENTER);
+		 //Possible make some columns uneditable (e.g. Product ID)
+		 scrollPane_1 = new JScrollPane(table_1);
+		 
+		 //Add a listener for changes in the cells
+		 table_1.getModel().addTableModelListener(
+				new TableModelListener()
+				{
+					@Override
+					public void tableChanged(TableModelEvent inEvent)
+					{
+						//Remove
+						System.out.println("Testing Table change Method");
+						try
+						{
+							System.out.println("Test Code");
+							DefaultTableModel tModel = (DefaultTableModel)inEvent.getSource();
+							int row = inEvent.getFirstRow();
+							int column = inEvent.getColumn();
+							InventoryManagementSystem.updateProduct(Interface.returnRow(row));
+						}
+						catch (Exception e)
+						{
+							InventoryManagementSystem.ErrorAlert("Unable to Update Entry", "INF01", e, Level.SEVERE);
+						}
+						
+					}
+				});
+		 frmNbGardensInventory.getContentPane().add(scrollPane_1, BorderLayout.CENTER);
 		 for(Product product : IMS.ProductLists())
 		 {
-			 
 			tModel.addRow(product.ObjectArray()); 
 		 }
 		 // #endregion
@@ -176,24 +197,7 @@ public class Interface {
 		
 	}
 	//#region Methods
-	public void tableChanged(TableModelEvent inEvent)
-	{
-		//TODO Detect table changes work
-		try
-		{
-			tModel = (DefaultTableModel)inEvent.getSource();
-			int row = inEvent.getFirstRow();
-			int column = inEvent.getColumn();
-			System.out.println("TESTING TABLE CHANGE");
-			IMS.updateProduct(returnRow(row));
-		}
-		catch (Exception e)
-		{
-			IMS.ErrorAlert("Unable to Update Entry", "INF01", e, Level.SEVERE);
-		}
-		
-	}
-	private Object[] returnRow(int inRow)
+	public static Object[] returnRow(int inRow)
 	{
 		Object[] result = new Object[tModel.getColumnCount()];
 		for(int i = 0; i<tModel.getColumnCount();i++)

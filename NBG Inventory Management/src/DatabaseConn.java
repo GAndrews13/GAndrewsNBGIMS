@@ -6,7 +6,7 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-//TODO Logging
+//Possible Logging
 public class DatabaseConn {
 	// #region Constructors
 	/**
@@ -89,6 +89,7 @@ public class DatabaseConn {
 		{
 			Class.forName(databaseDriver);
 			conn = DriverManager.getConnection(databaseURL,user,password);
+			System.out.println("Connection To database created");
 		}
 		catch (Exception e)
 		{
@@ -113,7 +114,7 @@ public class DatabaseConn {
 			InventoryManagementSystem.ErrorAlert("Database Record Creation Error", "DB02",e);
 		}
 		int productID = inProduct.productID();
-		//Check if the product ID is available, if it isn't then assign it a new product ID//TODO expand
+		//Check if the product ID is available, if it isn't then assign it a new product ID//TODO Possible
 		if(productID <= InventoryManagementSystem.CatalogCount())
 		{
 			productID = InventoryManagementSystem.CatalogCount()+1;
@@ -178,6 +179,7 @@ public class DatabaseConn {
 		try
 		{
 			conn.close();
+			System.out.println("Connection To database closed");
 		}
 		catch (SQLException e)
 		{
@@ -188,6 +190,7 @@ public class DatabaseConn {
 			if(conn != null)
 			{
 				conn.close();
+				System.out.println("Connection To database closed");
 			}	
 		}
 		catch (Exception e)
@@ -265,7 +268,7 @@ public class DatabaseConn {
 					);
 			String updateConditions = "productID = " + Integer.toString(inProduct.productID());
 			UpdateSQL("product",updateString, updateConditions);
-			//TODO variable length update statements
+			//Possible variable length update statements
 		}
 		catch (Exception e)
 		{
@@ -277,11 +280,10 @@ public class DatabaseConn {
 	 */
 	private void DeleteItem()
 	{
-		//TODO
+		//SQL Delete item
 		createConnection();
 		closeConnection();
 	}
 		//SQL PRODUCT SPERCIFIC METHODS
-	//UI TABLE METHODS
 	//#endregion
 }
