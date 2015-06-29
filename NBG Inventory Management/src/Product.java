@@ -75,6 +75,23 @@ public class Product {
 	private int currentInOrder;
 	//#region Variable Manipulators
 	/**
+	 * Returns an array of the products information
+	 * @return
+	 */
+	public Object[] ObjectArray()
+	{
+		Object[] returnValue = new Object[9];
+		returnValue[0] = productID;
+		returnValue[1] = productName;
+		returnValue[2] = productStock;
+		returnValue[3] = requiredStock;
+		returnValue[4] = stockCriticalLevel;
+		returnValue[5] = productCost;
+		returnValue[6] = stockChangeSinceLast; 
+		returnValue[7] = currentInOrder;
+		return returnValue;
+	}
+	/**
 	 * Returns the current cost of the product
 	 * @return
 	 * The cost
@@ -230,8 +247,6 @@ public class Product {
 	public void SystemWrite()
 	{
 		System.out.println(productName + " : " + productID + " : " + productStock);
-		
-		//System.out.println(String.format("%d: %d: %d: %d: %d",productName,productID,productStock));
 	}
 	// #endregion
 }

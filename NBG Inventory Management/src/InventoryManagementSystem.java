@@ -50,9 +50,29 @@ public class InventoryManagementSystem {
 	/**
 	 * the directory in which all reports are being exported to by default
 	 */
-	private String reportDirectory = "C:/Users/gandrews/workspace/GandrewsNBGIMS";
+	private String reportDirectory = "C:/Users/gandrews/workspace/GandrewsNBGIMS/Report Directory/";
 	//#endregion
 	// #region Methods
+		/**
+	 * Updates all product information into the database
+	 */
+	public void DatabaseSave()
+	{
+		for(int i = 0; i<productCatalog.size();i++)
+		{
+			databaseConnection.UpdateProduct(productCatalog.get(i));
+		}
+		JOptionPane.showMessageDialog(null,"Database Saved ","Save Method Complete",  JOptionPane.INFORMATION_MESSAGE);
+	}
+	/**
+	 * Loads the database refresh
+	 */
+	public void DatabaseLoad()
+	{
+		productCatalog = new ArrayList<Product>();
+		databaseConnection.readProductEntry();
+		JOptionPane.showMessageDialog(null,"Database Loaded","Load Method Complete",  JOptionPane.INFORMATION_MESSAGE);
+	}
 	//#region Variable Accessors
 	/**
 	 * Allows you to change the directory of generated stock reports
@@ -76,7 +96,6 @@ public class InventoryManagementSystem {
 	 */
 	public static void addProduct(Product inProduct)
 	{
-		//FIXME error
 		productCatalog.add(inProduct);
 	}
 	/**
@@ -137,7 +156,7 @@ public class InventoryManagementSystem {
 	 * @param inProducts
 	 * The list of products that have had their stock levels adjusted
 	 */
-	@SuppressWarnings("static-access") //Reason being that the custom size is required //FIXME solve static access warning
+	@SuppressWarnings("static-access") //Reason being that the custom size is required
 	static void StockIncreaseAlert(String inTitle, String inMessage, List<ProductOrderLine> inProducts)
 		{
 			String finalString = "";
@@ -247,21 +266,30 @@ public class InventoryManagementSystem {
 		String tempDate = DateTime();
 		tempDate = tempDate.replace('/', '-');
 		tempDate = tempDate.replace(':', '-');
-		String temp =reportDirectory+ "ProductReport " + tempDate + ".txt" ;
+		String temp = reportDirectory+ "ProductReport " + tempDate + ".txt" ;
 		return temp;
 	}
-/**
-	 * Writes out the products stored into a text file
+	public String FileNameGenerator(boolean isOrder)
+	{
+		String tempDate = DateTime();
+		tempDate = tempDate.replace('/', '-');
+		tempDate = tempDate.replace(':', '-');
+		String temp = reportDirectory+ "Stock Order " + tempDate + ".txt" ;
+		return temp;
+	}
+	/**
+	 * Writes out the products stored into a text file, while returning the file location
 	 */
-	public void writeToTxt()
+	public String writeToTxt()
 	{
 		PrintWriter writer = null;
+		String fileDirectory = FileNameGenerator();
+		
 		try
 		{
-			writer = new PrintWriter(FileNameGenerator(), "UTF-8");
+			writer = new PrintWriter(fileDirectory, "UTF-8");
 			try
 			{
-				
 				writer.println("<StartOfReport>");
 				writer.println("<DateTime: " +DateTime()+">");
 				for(int i = 0; i<productCatalog.size();i++)
@@ -278,6 +306,7 @@ public class InventoryManagementSystem {
 					writer.flush();
 				}
 				writer.println("<EndOfReport>");
+				writer.flush();
 			}
 			catch (Exception e)
 			{
@@ -302,7 +331,81 @@ public class InventoryManagementSystem {
 				writer.close();
 			}
 		}
+		JOptionPane.showMessageDialog(null,"Report Created at " + fileDirectory,"Text Report Created",  JOptionPane.INFORMATION_MESSAGE);
+		return fileDirectory;
 		
+	}
+	/**
+	 * Generate a product order for low stock and new items
+	 */
+	public void writeProductOrderDocument()
+	{
+		List<Product> toBeOrdered = new ArrayList<Product>();
+		for(Product prod : productCatalog)
+		{
+			if(prod.ProductStock() <= prod.CriticalLevel() && prod.ProductStock() != prod.RequiredStock())
+			{
+				toBeOrdered.add(prod);
+			}
+		}
+		
+		if(toBeOrdered.size() > 0)
+		{
+			String fileDirectory = FileNameGenerator(true);
+			PrintWriter pw = null;
+			int totalCost = 0;
+			try
+			{	
+				pw = new PrintWriter(fileDirectory,"UTF-8");
+				pw.println("Product Order Form");;
+				pw.println("Date Of Product Order Creation: " + DateTime());
+				for(Product prod : toBeOrdered)
+				{
+					int changeInStockRequired = prod.RequiredStock() - prod.ProductStock(); 
+					int changeInStockCost = changeInStockRequired * prod.ProductCost();
+					totalCost += changeInStockCost;
+					pw.println(String.format("Name: %s \r\n Product Quantity: %s \r\n Product Cost: %s",
+							prod.ProductName(),
+							changeInStockRequired,changeInStockCost
+							));
+				}
+				//TODO finance changer (100=1£ ext..)
+				pw.println("Total Cost: " + totalCost);
+				pw.println("End of Product Order Form");
+				pw.flush();
+				pw.close();
+				JOptionPane.showMessageDialog(null,"Stock Order Created at " + fileDirectory,"Stock Order Report Created",  JOptionPane.INFORMATION_MESSAGE);
+			}
+			catch (Exception e)
+			{
+				ErrorAlert("Error creating product order form", "IMSPO001", e, Level.SEVERE);
+			}
+		}
+		else
+		{
+			JOptionPane.showMessageDialog(null,"Sufficiant Stock, no order created","No Stock Order Form Created", JOptionPane.INFORMATION_MESSAGE);
+		}
+	}
+	/**
+	 * Update a product based on the Object array passed
+	 */
+	public void updateProduct(Object[] inObject)
+	{
+		for(int i  = 0; i<productCatalog.size();i++)
+		{
+			if(productCatalog.get(i).productID() == (int)inObject[0])
+			{
+				Product tempProduct = new Product((int) inObject[0], (String)inObject[1], (int) inObject[2], (int) inObject[3], (int) inObject[4], (int) inObject[5], (int) inObject[6], (int) inObject[7]);
+				Product initialProduct = productCatalog.get(i);
+				productComparison(initialProduct, tempProduct);
+				
+				productCatalog.set(i, tempProduct);
+			}
+		}
+	}
+	private void productComparison(Product inOriginal, Product inChanged)
+	{
+		//TODO execute changes
 	}
 	//#endregion
 }

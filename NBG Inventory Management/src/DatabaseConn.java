@@ -89,7 +89,6 @@ public class DatabaseConn {
 		{
 			Class.forName(databaseDriver);
 			conn = DriverManager.getConnection(databaseURL,user,password);
-			System.out.println("Connection To Datebase Complete");
 		}
 		catch (Exception e)
 		{
@@ -149,11 +148,9 @@ public class DatabaseConn {
 		try
 		{
 			ResultSet results = statement.executeQuery(defaultString);
-			System.out.println("test");
 			while(results.next())
 			{
 				//FIXME this code is not running
-				System.out.println("test 2");
 				int prodID = results.getInt("ProductID");
 				String prodName = results.getString("ProductName");
 				int prodStock = results.getInt("Stock");
@@ -164,9 +161,6 @@ public class DatabaseConn {
 				int prodCurrentInOrder = results.getInt("currentInOrder");
 				
 				tempProduct = new Product(prodID, prodName, prodStock, prodReqStock, prodCriticalLevel, prodCost, prodLastPurchase, prodCurrentInOrder);
-				//Debug code to print product info
-				tempProduct.SystemWrite();
-				//FIXME help
 				InventoryManagementSystem.addProduct(tempProduct);
 			}
 		}
@@ -184,7 +178,6 @@ public class DatabaseConn {
 		try
 		{
 			conn.close();
-			System.out.println("Connection To Database Closed");
 		}
 		catch (SQLException e)
 		{
@@ -195,7 +188,6 @@ public class DatabaseConn {
 			if(conn != null)
 			{
 				conn.close();
-				System.out.println("Connection To Database Closed");
 			}	
 		}
 		catch (Exception e)
@@ -289,7 +281,7 @@ public class DatabaseConn {
 		createConnection();
 		closeConnection();
 	}
-	//SQL PRODUCT SPERCIFIC METHODS
+		//SQL PRODUCT SPERCIFIC METHODS
 	//UI TABLE METHODS
 	//#endregion
 }
