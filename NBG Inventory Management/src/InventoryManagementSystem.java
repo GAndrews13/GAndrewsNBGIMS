@@ -14,17 +14,17 @@ public class InventoryManagementSystem {
 	public InventoryManagementSystem()
 	{
 		//Remove
-		Product tempProduct = new Product(DateTime(), 1, 13, 13, 11, 1000);
+		//Product tempProduct = new Product(DateTime(), 1, 13, 13, 11, 1000);
 		databaseConnection.readProductEntry();
 		//databaseConnection.CreateProductEntry(tempProduct);
-		tempProduct.ProductName(DateTime());
-		databaseConnection.UpdateProduct(tempProduct);
+		//tempProduct.ProductName(DateTime());
+		//databaseConnection.UpdateProduct(tempProduct);
 		writeToTxt();
 	}
 	
 	// #region variables
 	/**
-	 * Creates and retains the connection to the database aswell as methods involving the database
+	 * Creates and retains the connection to the database as well as methods involving the database
 	 */
 	private DatabaseConn databaseConnection = new DatabaseConn();
 	/**
@@ -102,6 +102,14 @@ public class InventoryManagementSystem {
 	public int LastOrderLineCreated()
 	{
 		return lastOrderLineCreated;
+	}
+	/**
+	 * Returns the list of products gathered
+	 * @return
+	 */
+	public List<Product> ProductLists()
+	{
+		return productCatalog;
 	}
 	//#endregion
 	static void main(String[] args)

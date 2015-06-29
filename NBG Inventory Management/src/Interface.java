@@ -7,21 +7,26 @@ import javax.swing.JMenuItem;
 import java.awt.BorderLayout;
 
 import javax.swing.JMenuBar;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.JButton;
+import javax.swing.JPanel;
 
 
 public class Interface {
 
 	private JFrame frmNbGardensInventory;
-	private JTable table;
+	private JTable table_1;
+	JScrollPane scrollPane_1;
+	static InventoryManagementSystem IMS;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		{
-			InventoryManagementSystem IMS = new InventoryManagementSystem();
+			 IMS = new InventoryManagementSystem();
 		}
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -87,12 +92,20 @@ public class Interface {
 		 menuItem = new JMenuItem("Toggle Simulation");
 		 menu.add(menuItem);
 		 
-		 JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		 frmNbGardensInventory.getContentPane().add(tabbedPane, BorderLayout.CENTER);
-		//UI add tabs for invoices and stock order
+		 JScrollPane scrollPane = new JScrollPane();
 		 //#region Data View Tab
-		 table = new JTable();
-		 tabbedPane.addTab("DataView", null, table, null);
+		 String[] columnNames = {"ProductID","ProductName", "Stock", "Required Stock", "Critical Level", "Cost", "Since Last Review", "Current In Order", "Product Orders"};
+		 String[][]blankTable = new String[0][9];
+		 table_1 = new JTable(blankTable,columnNames);
+		 scrollPane = new JScrollPane(table_1);
+		 frmNbGardensInventory.getContentPane().add(scrollPane, BorderLayout.CENTER);
+		 for(Product product : IMS.ProductLists())
+		 {
+			 
+		 }
+		 
+		 
+		 
 		 // #endregion
 		 //#endregion
 		
