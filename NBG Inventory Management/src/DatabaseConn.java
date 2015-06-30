@@ -221,7 +221,6 @@ public class DatabaseConn {
 					);
 			String updateConditions = "productID = " + Integer.toString(inProduct.productID());
 			UpdateSQL("product",updateString, updateConditions);
-			//TODO variable length update statements
 		}
 		catch (Exception e)
 		{

@@ -2,6 +2,7 @@
 public class ProductOrderLine
 {
 	/**
+	 * 
 	 * The unique ID of the product order line
 	 */
 	private final int orderLineID;
@@ -25,6 +26,15 @@ public class ProductOrderLine
 	public ProductOrderLine(int inOrderID)
 	{
 		orderLineID = inOrderID;
+	}
+	/**
+	 * Allows you to create a product order line in regards to a specific product
+	 * @param inProduct
+	 */
+	public ProductOrderLine(int inOrderID, Product inProduct)
+	{
+		orderLineID = inOrderID;
+		productID = inProduct;
 	}
 	/**
 	 * Allows you to set the product that this particular product order refers to 

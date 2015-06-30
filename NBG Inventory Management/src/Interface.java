@@ -30,7 +30,6 @@ public class Interface {
 	static InventoryManagementSystem IMS;
 	private static DefaultTableModel tModel;
 	private ActionListener actionListener = new ActionListener(){
-
 		@Override
 		//#region Listener
 		/**
@@ -56,11 +55,9 @@ public class Interface {
 				case "RefreshDatabase":
 					refreshTable();
 					break;
-				case "LoadDatabase":
-					IMS.DatabaseLoad();
-					break;
 				case "ForceSave":
 					IMS.DatabaseSave();
+					refreshTable();
 					break;
 				case "ToggleSim":
 					
@@ -138,10 +135,6 @@ public class Interface {
 		 menuItem.addActionListener(actionListener);
 		 menuItem.setActionCommand("RefreshDatabase");
 		 menu.add(menuItem);
-		 menuItem = new JMenuItem("Load Database");
-		 menuItem.setActionCommand("LoadDatabase");
-		 menuItem.addActionListener(actionListener);
-		 menu.add(menuItem);
 		 menuItem = new JMenuItem("Force save");
 		 menuItem.setActionCommand("ForceSave");
 		 menuItem.addActionListener(actionListener);
@@ -154,7 +147,6 @@ public class Interface {
 		 menuItem.setActionCommand("ToggleSim");
 		 menu.add(menuItem);
 		 
-		 JScrollPane scrollPane = new JScrollPane();
 		 //#region Data View Tab
 		 String[] columnNames = {"ProductID","ProductName", "Stock", "Required Stock", "Critical Level", "Cost", "Since Last Review", "Current In Order"};
 		 String[][]blankTable = new String[0][8];
@@ -170,21 +162,19 @@ public class Interface {
 					@Override
 					public void tableChanged(TableModelEvent inEvent)
 					{
-						//Remove
-						System.out.println("Testing Table change Method");
-						try
+						if(tModel.getRowCount()>0)
 						{
-							System.out.println("Test Code");
-							DefaultTableModel tModel = (DefaultTableModel)inEvent.getSource();
-							int row = inEvent.getFirstRow();
-							int column = inEvent.getColumn();
-							InventoryManagementSystem.updateProduct(Interface.returnRow(row));
+							try
+							{
+								int row = inEvent.getFirstRow();
+								int column = inEvent.getColumn();
+								InventoryManagementSystem.updateProduct(Interface.returnRow(row));
+							}
+							catch (Exception e)
+							{
+								InventoryManagementSystem.ErrorAlert("Unable to Update Entry", "INF01", e, Level.SEVERE);
+							}
 						}
-						catch (Exception e)
-						{
-							InventoryManagementSystem.ErrorAlert("Unable to Update Entry", "INF01", e, Level.SEVERE);
-						}
-						
 					}
 				});
 		 frmNbGardensInventory.getContentPane().add(scrollPane_1, BorderLayout.CENTER);
@@ -211,20 +201,18 @@ public class Interface {
 	 */
 	public static void refreshTable()
 	{
-		//TODO Currently removes only odd entries
-		//Remove all current entries in the program
-		/*for(int i = 0; i <tModel.getRowCount();i++)
-		{
-			tModel.removeRow(i);
-		}*/
-		tModel = new DefaultTableModel();
+		//Remove all rows
+		DefaultTableModel dtm = (DefaultTableModel) table_1.getModel();
+		dtm.setRowCount(0);
 		//Load all products from the database
-		IMS.DatabaseLoad();
+		//IMS.DatabaseLoad();
+		IMS.ReadDatabase();
+		//TODO reload in order
 		//Refresh the table with the new items
-		for(Product product : IMS.ProductLists())
-		 {
-			tModel.addRow(product.ObjectArray()); 
-		 }
+		for(int i = 0;i<(IMS.ProductLists().size());i++)
+		{
+			tModel.addRow(IMS.ProductLists().get(i).ObjectArray());
+		}
 	}
 	//#endregion
 }

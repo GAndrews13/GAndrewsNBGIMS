@@ -78,6 +78,7 @@ public class Product {
 	 * Returns an array of the products information
 	 * @return
 	 */
+	@Deprecated
 	public Object[] ObjectArray()
 	{
 		Object[] returnValue = new Object[9];

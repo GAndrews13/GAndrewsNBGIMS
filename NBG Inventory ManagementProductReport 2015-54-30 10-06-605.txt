@@ -1,0 +1,69 @@
+<StartOfReport>
+<DateTime: 2015/54/30 10:06:605>
+Product ID: 1 
+ Product Name: NetBuilder 5000 
+ Current Stock: 17 
+ Recommended Stock Level: 12 
+ Critical Stock Level: 11000 
+ Product Cost: 11000
+Product ID: 2 
+ Product Name: Machine Gun Gnome 
+ Current Stock: 16 
+ Recommended Stock Level: 13 
+ Critical Stock Level: 1000 
+ Product Cost: 1000
+Product ID: 3 
+ Product Name: Zombie Gnome 
+ Current Stock: 18 
+ Recommended Stock Level: 14 
+ Critical Stock Level: 1200 
+ Product Cost: 1200
+Product ID: 4 
+ Product Name: Gargoyle 
+ Current Stock: 19 
+ Recommended Stock Level: 15 
+ Critical Stock Level: 17000 
+ Product Cost: 17000
+Product ID: 5 
+ Product Name: Chimera Statue 
+ Current Stock: 17 
+ Recommended Stock Level: 13 
+ Critical Stock Level: 8900 
+ Product Cost: 8900
+Product ID: 6 
+ Product Name: Musical Train Statue 
+ Current Stock: 14 
+ Recommended Stock Level: 12 
+ Critical Stock Level: 1500 
+ Product Cost: 1500
+Product ID: 7 
+ Product Name: Hexagonal Pathing Slabs 
+ Current Stock: 50 
+ Recommended Stock Level: 30 
+ Critical Stock Level: 300 
+ Product Cost: 300
+Product ID: 8 
+ Product Name: Sunset Chair 
+ Current Stock: 16 
+ Recommended Stock Level: 10 
+ Critical Stock Level: 1400 
+ Product Cost: 1400
+Product ID: 9 
+ Product Name: Half Moon Seat 
+ Current Stock: 21 
+ Recommended Stock Level: 8 
+ Critical Stock Level: 1300 
+ Product Cost: 1300
+Product ID: 10 
+ Product Name: Full Moon Sofa 
+ Current Stock: 27 
+ Recommended Stock Level: 9 
+ Critical Stock Level: 1200 
+ Product Cost: 1200
+Product ID: 11 
+ Product Name: Mega Jacuzzi 
+ Current Stock: 10 
+ Recommended Stock Level: 5 
+ Critical Stock Level: 15000 
+ Product Cost: 15000
+<EndOfReport>

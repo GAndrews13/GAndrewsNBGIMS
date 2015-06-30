@@ -9,23 +9,58 @@ import java.text.SimpleDateFormat;
 
 import javax.swing.JOptionPane;
 
+import java.io.File;
 
 public class InventoryManagementSystem {
 	public InventoryManagementSystem()
 	{
+		//Create the file for collecting reports
+		File directory = new File("Reports");
+		try
+		{
+			directory.mkdir();
+		}
+		catch (Exception e) 
+		{
+			ErrorAlert("Could not create report directory", "Error creating report directory", e);
+		}
+		
 		//Product tempProduct = new Product(DateTime(), 1, 13, 13, 11, 1000);
 		databaseConnection.readProductEntry();
 		//databaseConnection.CreateProductEntry(tempProduct);
 		//tempProduct.ProductName(DateTime());
-		//databaseConnection.UpdateProduct(tempProduct);
+		//UpdateProduct(tempProduct);
 		//writeToTxt();
+		//#region Demo Code
+		//#region Increasing stock message
+		//	List<ProductOrderLine> pll = new ArrayList<ProductOrderLine>();
+		//	ProductOrderLine pl = new ProductOrderLine(lastOrderLineCreated, productCatalog.get(4));
+		//	ProductOrderLine pl2 = new ProductOrderLine(lastOrderLineCreated, productCatalog.get(7));
+		//	ProductOrderLine pl3 = new ProductOrderLine(lastOrderLineCreated, productCatalog.get(1));
+		//	pl.ChangeQuantity(15);
+		//	pl2.ChangeQuantity(50);
+		//	pl3.ChangeQuantity(5);
+		//	pll.add(pl);
+		//	pll.add(pl2);
+		//	pll.add(pl3);
+			//StockIncreaseAlert("Products Recieved: ", "Product Order Recieved: " + lastOrderLineCreated, pll);
+		//#endregion
+		//#region error message
+			//InventoryManagementSystem.ErrorAlert("Database Connection Error", "DBC019", new Exception("No database found"), Level.SEVERE);
+		//#endregion
+		//#region Low Stock message
+			//Product tempProduct = productCatalog.get(1);
+			//tempProduct.RemoveStock(tempProduct.ProductStock()-1);
+			//updateProduct(tempProduct.ObjectArray());
+		//#endregion
+		//#region end of demo
 	}
 	
 	// #region variables
 	/**
 	 * Creates and retains the connection to the database as well as methods involving the database
 	 */
-	private DatabaseConn databaseConnection = new DatabaseConn();
+	private static DatabaseConn databaseConnection = new DatabaseConn();
 	/**
 	 * The logger used to record all errors that occur within the InventoryManagementSystem.java runtime
 	 */
@@ -49,7 +84,9 @@ public class InventoryManagementSystem {
 	/**
 	 * the directory in which all reports are being exported to by default
 	 */
-	private String reportDirectory = "C:/Users/gandrews/workspace/GandrewsNBGIMS/Report Directory/";
+	private String reportDirectory = System.getProperty("user.dir")+ "\\Reports\\";  
+			//Old file path
+			//"C:/Users/gandrews/workspace/GandrewsNBGIMS/Report Directory/";
 	//#endregion
 	// #region Methods
 		/**
@@ -59,7 +96,7 @@ public class InventoryManagementSystem {
 	{
 		for(int i = 0; i<productCatalog.size();i++)
 		{
-			databaseConnection.UpdateProduct(productCatalog.get(i));
+			updateProduct(productCatalog.get(i));
 		}
 		JOptionPane.showMessageDialog(null,"Database Saved ","Save Method Complete",  JOptionPane.INFORMATION_MESSAGE);
 	}
@@ -68,7 +105,11 @@ public class InventoryManagementSystem {
 	 */
 	public void DatabaseLoad()
 	{
-		productCatalog = new ArrayList<Product>();
+		for(int i = 0; i< productCatalog.size();i++)
+		{
+			productCatalog.remove(i);
+		}
+		//productCatalog = new ArrayList<Product>();
 		databaseConnection.readProductEntry();
 		JOptionPane.showMessageDialog(null,"Database Loaded","Load Method Complete",  JOptionPane.INFORMATION_MESSAGE);
 	}
@@ -125,9 +166,9 @@ public class InventoryManagementSystem {
 	 * Returns the list of products gathered
 	 * @return
 	 */
-	public List<Product> ProductLists()
+	public ArrayList<Product> ProductLists()
 	{
-		return productCatalog;
+		return (ArrayList<Product>) productCatalog;
 	}
 	//#endregion
 	static void main(String[] args)
@@ -158,11 +199,17 @@ public class InventoryManagementSystem {
 	@SuppressWarnings("static-access") //Reason being that the custom size is required
 	static void StockIncreaseAlert(String inTitle, String inMessage, List<ProductOrderLine> inProducts)
 		{
-			String finalString = "";
+			String finalString = "\r\n";
 			for(int i = 0; i<inProducts.size();i++)
 			{
-				finalString += inProducts.get(i).Product().ProductName()+"("+inProducts.get(i).Product().productID()+(")");
-				finalString += "/n";
+				//text
+				finalString += String.format("Product Name: (%s) %-35s Quantity: %-35d", inProducts.get(i).Product().productID(),inProducts.get(i).Product().ProductName(),inProducts.get(i).Quantity());
+				finalString += "\r\n";
+				//Logic
+				//update product
+				inProducts.get(i).Product().IncreaseStockLevel(inProducts.get(i).Quantity());
+				//update database
+				updateProduct(inProducts.get(i).Product());
 			}
 			logger.log(Level.FINE, "Stock Increased: " + inTitle);
 			JOptionPane pane = new JOptionPane();
@@ -244,7 +291,7 @@ public class InventoryManagementSystem {
 	static void LowStockAlert(String inProductName, int inProductID)
 		{
 			logger.log(Level.FINE, "Low Stock Reported: " + inProductName + "(" + inProductID + ")");
-			JOptionPane.showMessageDialog(null, "Low Stock:" + inProductName + "(" + inProductID + ")","Low Stock",JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Low Stock:" + " (" + inProductID + ") " + inProductName ,"Low Stock",JOptionPane.WARNING_MESSAGE);
 		}
 	/**
 	 * Returns the date and time (used in reporting errors and changes in the system)
@@ -294,7 +341,7 @@ public class InventoryManagementSystem {
 				for(int i = 0; i<productCatalog.size();i++)
 				{
 					writer.println(String.format(
-							"Product ID: (%s) Product Name: (%s) Current Stock: (%s) Recommended Stock Level: (%s) Critical Stock Level: (%s) Product Cost: (%s)", 
+							"Product ID: %s %n Product Name: %s %n Current Stock: %s %n Recommended Stock Level: %s %n Critical Stock Level: %s %n Product Cost: %s", 
 							productCatalog.get(i).productID(),
 							productCatalog.get(i).ProductName(),
 							productCatalog.get(i).ProductStock(),
@@ -363,14 +410,14 @@ public class InventoryManagementSystem {
 					int changeInStockRequired = prod.RequiredStock() - prod.ProductStock(); 
 					int changeInStockCost = changeInStockRequired * prod.ProductCost();
 					totalCost += changeInStockCost;
-					pw.println(String.format("Name: %s \r\n Product Quantity: %s \r\n Product Cost: %s",
+					pw.println(String.format("Product Name: %s \r\n Product Quantity: %s \r\n Product Cost: %s",
 							prod.ProductName(),
 							changeInStockRequired,changeInStockCost
 							));
 				}
 				//Possible finance changer (100=1£ ext..)
 				pw.println("Total Cost: " + totalCost);
-				pw.println("End of Product Order Form");
+				pw.println("Product Order Form For NBGardens");
 				pw.flush();
 				pw.close();
 				JOptionPane.showMessageDialog(null,"Stock Order Created at " + fileDirectory,"Stock Order Report Created",  JOptionPane.INFORMATION_MESSAGE);
@@ -394,28 +441,98 @@ public class InventoryManagementSystem {
 		{
 			try
 			{
+				//Find matching product in the database based on their unique ID
 				if(productCatalog.get(i).productID() == (int)inObject[0])
 				{
 					int tempID = 0, tempStock = 0, tempReq = 0, tempCrit = 0, tempCost = 0, tempSLP = 0, tempCIO = 0;
 					String tempName = "";
-					//FIXME cast objects to integer types
 					try
 					{
-						tempID = (Integer)inObject[0];
-						tempName = (String)inObject[1];
-						tempStock = (Integer)inObject[3];
-						tempReq = (Integer)inObject[4];
-						tempCrit = (Integer)inObject[5];
-						tempCost = (Integer)inObject[5];
-						tempSLP = (Integer)inObject[6];
-						tempCIO = (Integer)inObject[7];
+						//FIXME
+						String errorString = "";
+						try
+						{
+							tempID = (int)inObject[0];
+						}
+						catch (Exception e)
+						{
+							errorString += "ID ";
+						}
+						try
+						{
+							tempName = (String)inObject[1];
+						}
+						catch (Exception e)
+						{
+							errorString += "NAME ";
+						}
+						try
+						{
+							tempStock = (int)inObject[2];
+
+						}
+						catch (Exception e)
+						{
+							errorString += "STOCK ";
+						}
+						try
+						{
+							tempReq = (int)inObject[3];
+
+						}
+						catch (Exception e)
+						{
+							errorString += "REQ ";
+						}
+						try
+						{
+							tempCrit = (int)inObject[4];
+
+						}
+						catch (Exception e)
+						{
+							errorString += "CRIT ";
+						}
+						try
+						{
+							tempCost = (int)inObject[5];
+
+						}
+						catch (Exception e)
+						{
+							errorString += "COST ";
+						}
+						try
+						{
+							tempSLP = (int)inObject[6];
+
+						}
+						catch (Exception e)
+						{
+							errorString += "SLP ";
+						}
+						try
+						{
+							tempCIO = (int)inObject[7];
+
+						}
+						catch (Exception e)
+						{
+							errorString += "CIO ";
+						}
+						System.out.println(errorString);
 						
-						
-						Product tempProduct = new Product(tempID, tempName, tempStock, tempReq, tempCrit, tempCost, tempSLP, tempCIO);
-						Product initialProduct = productCatalog.get(i);
-						//Remove
-						System.out.println("Product Changed: " + initialProduct.ProductName());
+						Product tempProduct = new Product(tempID, tempName, tempStock, tempReq, tempCrit, tempCost, tempSLP, tempCIO);						
 						productCatalog.set(i, tempProduct);
+						try
+						{
+							//databaseConnection.UpdateProduct(tempProduct);
+							System.out.println("Product Changed: " + tempProduct.ProductName());
+						}
+						catch (Exception e) 	
+						{
+							InventoryManagementSystem.ErrorAlert("Error Updating Products", "IMSUP019", e, Level.WARNING);
+						}
 					}
 					catch (Exception e)
 					{
@@ -428,6 +545,30 @@ public class InventoryManagementSystem {
 				InventoryManagementSystem.ErrorAlert("Error Updating Products", "IMSUP001", e, Level.WARNING);
 			}
 		}
+	}
+	/**
+	 * Allows a product to be updated in the database
+	 * @param inProduct
+	 */
+	public static void updateProduct(Product inProduct)
+	{
+		try
+		{
+			databaseConnection.UpdateProduct(inProduct);
+			System.out.println("Product Changed: " + inProduct.ProductName());
+		}
+		catch (Exception e) 
+		{
+			InventoryManagementSystem.ErrorAlert("Error Updating Products", "IMSUP019", e, Level.WARNING);
+		}
+	}
+	/**
+	 * Refreshes the database
+	 */
+	public static void ReadDatabase()
+	{
+		productCatalog.removeAll(productCatalog);
+		databaseConnection.readProductEntry();
 	}
 	//#endregion
 }
