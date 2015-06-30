@@ -249,5 +249,6 @@ public class Product {
 	{
 		System.out.println(productName + " : " + productID + " : " + productStock);
 	}
+	
 	// #endregion
 }

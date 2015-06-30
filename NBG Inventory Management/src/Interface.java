@@ -54,6 +54,7 @@ public class Interface {
 					break;
 				case "RefreshDatabase":
 					refreshTable();
+					IMS.GeneralAlert("Database Updated", "Your database has been updated");
 					break;
 				case "ForceSave":
 					IMS.DatabaseSave();
@@ -151,7 +152,24 @@ public class Interface {
 		 String[] columnNames = {"ProductID","ProductName", "Stock", "Required Stock", "Critical Level", "Cost", "Since Last Review", "Current In Order"};
 		 String[][]blankTable = new String[0][8];
 		 tModel = new DefaultTableModel(blankTable,columnNames);
-		 table_1 = new JTable(tModel);
+		 table_1 = new JTable(tModel)
+		 {
+			 /**
+			  * Prevents people editing products ID's
+			  */
+			 @Override
+			 public boolean isCellEditable(int row, int col)
+			 {
+				 if(col==0)
+				 {
+					 return false;
+				 }
+				 else
+				 {
+					 return true;
+				 }
+			 }
+		 };
 		 //Possible make some columns uneditable (e.g. Product ID)
 		 scrollPane_1 = new JScrollPane(table_1);
 		 
@@ -167,7 +185,6 @@ public class Interface {
 							try
 							{
 								int row = inEvent.getFirstRow();
-								int column = inEvent.getColumn();
 								InventoryManagementSystem.updateProduct(Interface.returnRow(row));
 							}
 							catch (Exception e)

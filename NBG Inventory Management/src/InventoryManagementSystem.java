@@ -68,15 +68,15 @@ public class InventoryManagementSystem {
 	/**
 	 * The ID of the last sale order created
 	 */
-	private int lastSaleCreated = 0;
+	private static int lastSaleCreated = 0;
 	/**
 	 * The ID of the last Invoice created
 	 */
-	private int lastInvoiceCreated = 0;
+	private static int lastInvoiceCreated = 0;
 	/**
 	 * ID of the last order line created
 	 */
-	private int lastOrderLineCreated = 0;
+	private static int lastOrderLineCreated = 0;
 	/**
 	 * The array of products stored within the system
 	 */
@@ -84,9 +84,7 @@ public class InventoryManagementSystem {
 	/**
 	 * the directory in which all reports are being exported to by default
 	 */
-	private String reportDirectory = System.getProperty("user.dir")+ "\\Reports\\";  
-			//Old file path
-			//"C:/Users/gandrews/workspace/GandrewsNBGIMS/Report Directory/";
+	private String reportDirectory = System.getProperty("user.dir")+ "\\Reports\\";
 	//#endregion
 	// #region Methods
 		/**
@@ -448,86 +446,33 @@ public class InventoryManagementSystem {
 					String tempName = "";
 					try
 					{
-						//FIXME
-						String errorString = "";
-						try
-						{
-							tempID = (int)inObject[0];
-						}
-						catch (Exception e)
-						{
-							errorString += "ID ";
-						}
-						try
-						{
-							tempName = (String)inObject[1];
-						}
-						catch (Exception e)
-						{
-							errorString += "NAME ";
-						}
-						try
-						{
-							tempStock = (int)inObject[2];
-
-						}
-						catch (Exception e)
-						{
-							errorString += "STOCK ";
-						}
-						try
-						{
-							tempReq = (int)inObject[3];
-
-						}
-						catch (Exception e)
-						{
-							errorString += "REQ ";
-						}
-						try
-						{
-							tempCrit = (int)inObject[4];
-
-						}
-						catch (Exception e)
-						{
-							errorString += "CRIT ";
-						}
-						try
-						{
-							tempCost = (int)inObject[5];
-
-						}
-						catch (Exception e)
-						{
-							errorString += "COST ";
-						}
-						try
-						{
-							tempSLP = (int)inObject[6];
-
-						}
-						catch (Exception e)
-						{
-							errorString += "SLP ";
-						}
-						try
-						{
-							tempCIO = (int)inObject[7];
-
-						}
-						catch (Exception e)
-						{
-							errorString += "CIO ";
-						}
-						System.out.println(errorString);
+						tempID = Integer.parseInt(inObject[0].toString());
+						tempName = (String)inObject[1];
+						tempStock = Integer.parseInt(inObject[2].toString());
+						tempReq = Integer.parseInt(inObject[3].toString());
+						tempCrit = Integer.parseInt(inObject[4].toString());
+						tempCost = Integer.parseInt(inObject[5].toString());
+						tempSLP = Integer.parseInt(inObject[6].toString());
+						tempCIO = Integer.parseInt(inObject[7].toString());
 						
-						Product tempProduct = new Product(tempID, tempName, tempStock, tempReq, tempCrit, tempCost, tempSLP, tempCIO);						
+						Product tempProduct = new Product(tempID, tempName, tempStock, tempReq, tempCrit, tempCost, tempSLP, tempCIO);
+						//Throw up messages and alerts //FIXME Messages should throw automatically on adjustments //Remove or remove editing messages
+						Product originalProduct = productCatalog.get(i);
+						if(tempProduct.ProductStock() <= tempProduct.CriticalLevel())
+						{
+							LowStockAlert(tempProduct.ProductName(),tempProduct.productID());
+						}
+						if(tempProduct.ProductStock()> originalProduct.ProductStock())
+						{
+							ArrayList<ProductOrderLine> tempArray = new ArrayList<ProductOrderLine>();
+							tempArray.add(new ProductOrderLine(lastOrderLineCreated,tempProduct));
+							StockIncreaseAlert("Stock has increased","The following items have increased: ", tempArray);
+						}
+						
 						productCatalog.set(i, tempProduct);
 						try
 						{
-							//databaseConnection.UpdateProduct(tempProduct);
-							System.out.println("Product Changed: " + tempProduct.ProductName());
+							databaseConnection.UpdateProduct(tempProduct);
 						}
 						catch (Exception e) 	
 						{
