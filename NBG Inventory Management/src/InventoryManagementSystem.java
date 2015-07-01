@@ -424,7 +424,7 @@ public class InventoryManagementSystem {
 					totalCost += changeInStockCost;
 					pw.println(String.format(formatString,prod.productID(),prod.ProductName(),changeInStockRequired,changeInStockCost));
 				}
-				//Possible finance changer (100=1£ ext..)
+				//Possible finance changer
 				pw.println(seperator);
 				pw.println("Total Cost: " + totalCost);
 				pw.println("Product Order Form For NBGardens");
