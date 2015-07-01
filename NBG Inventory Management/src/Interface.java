@@ -27,7 +27,7 @@ public class Interface {
 	private JFrame frmNbGardensInventory;
 	private static JTable table_1;
 	private JScrollPane scrollPane_1;
-	static InventoryManagementSystem IMS;
+	static public InventoryManagementSystem IMS;
 	private static DefaultTableModel tModel;
 	private ActionListener actionListener = new ActionListener(){
 		@Override
