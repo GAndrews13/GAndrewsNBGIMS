@@ -37,7 +37,7 @@ public class DatabaseConn {
 	 * The URL of the database you wish to access
 	 */
 	//static String databaseURL = "jdbc:mysql://Localhost/nbgdatabase";
-	static String databaseURL = "jdbc:mysql://10.50.15.3/nbgdatabase";
+	static String databaseURL = "jdbc:mysql://10.50.15.3:3306/nbgdatabase";
 	/**
 	 * The user name used to log into the database server
 	 */
