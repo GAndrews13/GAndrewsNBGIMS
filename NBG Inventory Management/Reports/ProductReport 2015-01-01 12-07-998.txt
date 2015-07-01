@@ -1,0 +1,38 @@
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+NB Gardens Stock List
+DateTime: 2015/01/01 12:07:00>
+Product ID      Product Name                   Current Stock        Recommended Stock Level        Critical Stock Level           Product Cost         Currently in Order  
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+1               NetBuilder 5000                20                   50                             10                             11000                0                   
+2               Machine Gun Gnome              13                   50                             9                              1000                 0                   
+3               Zombie Gnome                   23                   50                             19                             1200                 0                   
+4               Gargoyle                       9                    50                             11                             17000                0                   
+5               Chimera Statue                 55                   50                             15                             8900                 0                   
+6               Musical Train Statue           9                    50                             11                             1500                 0                   
+7               Hexagonal Pathing Slabs        31                   150                            100                            300                  0                   
+8               Sunset Chair                   16                   50                             9                              1400                 0                   
+9               Half Moon Seat                 14                   50                             13                             1300                 0                   
+10              Full Moon Sofa                 15                   50                             13                             1200                 -1                  
+11              Mega Jacuzzi                   18                   50                             14                             15000                0                   
+12              Gnome Builder                  8                    15                             7                              1340                 0                   
+13              Cap Gnome                      2                    3                              2                              9900                 0                   
+14              League Of Gnomes               8                    15                             7                              1404                 0                   
+15              Defence of the Gnomes          8                    16                             7                              160                  0                   
+16              Gnome Guard                    8                    7                              7                              135                  0                   
+17              Gnome Craft                    8                    1                              7                              2670                 0                   
+18              Heroes of the Gnomes           8                    18                             7                              3590                 0                   
+19              Gnome Crush                    8                    9                              7                              3870                 0                   
+20              Gnome Storm                    8                    8                              7                              3290                 0                   
+21              Chronicles of Gnome            8                    17                             7                              1500                 0                   
+22              2 Fast 4 Gnomes                8                    16                             7                              1500                 0                   
+23              Tales of a Gnome               8                    25                             7                              1500                 0                   
+24              Gnome Tales                    8                    32                             7                              1500                 0                   
+25              The Gnome: Wilderbeast         8                    15                             7                              1500                 0                   
+26              Revenge of the Gnomes          8                    16                             7                              1500                 0                   
+27              Shaun of the Gnomes            8                    75                             7                              1500                 0                   
+28              Gnome of the End               8                    25                             7                              1500                 0                   
+29              Hunter Gnomes                  8                    42                             7                              1500                 0                   
+30              Seraph Gnomes                  8                    11                             7                              1500                 0                   
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+End Of Stock List
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 

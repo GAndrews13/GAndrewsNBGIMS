@@ -100,27 +100,16 @@ public class Interface {
 	 */
 	private void initialize() {
 		frmNbGardensInventory = new JFrame();
+		frmNbGardensInventory.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frmNbGardensInventory.setTitle("NB Gardens Inventory Management System");
 		frmNbGardensInventory.setBounds(100, 100, 651, 530);
 		
 		JMenuBar menuBar = new JMenuBar();
 		frmNbGardensInventory.setJMenuBar(menuBar);
-		//#region Manually control stock 
-		JMenu menu = new JMenu("Stock Control");
-		 menuBar.add(menu);
-		 JMenuItem menuItem = new JMenuItem("Add Item");
-		 menuItem.setActionCommand("AddItem");
-		 menuItem.addActionListener(actionListener);
-		 menu.add(menuItem);
-		 menuItem = new JMenuItem("Change Stock");
-		 menuItem.addActionListener(actionListener);
-		 menuItem.setActionCommand("ChangeStock");
-		 menu.add(menuItem);
-		 //#endregion
 		 //#region Admin
-		 menu = new JMenu("Admin Controls");
+		 JMenu menu = new JMenu("Admin Controls");
 		 menuBar.add(menu);
-		 menuItem = new JMenuItem("Create stock list TXT");
+		 JMenuItem menuItem = new JMenuItem("Create stock list TXT");
 		 menuItem.setActionCommand("StockList");
 		 menuItem.addActionListener(actionListener);
 		 menu.add(menuItem);
@@ -141,12 +130,6 @@ public class Interface {
 		 menuItem.addActionListener(actionListener);
 		 menu.add(menuItem);
 		 //#endregion
-		 //#region Demo
-		 menu = new JMenu("Demo Controls");
-		 menuBar.add(menu);
-		 menuItem = new JMenuItem("Toggle Simulation");
-		 menuItem.setActionCommand("ToggleSim");
-		 menu.add(menuItem);
 		 
 		 //#region Data View Tab
 		 String[] columnNames = {"ProductID","ProductName", "Stock", "Required Stock", "Critical Level", "Cost", "Since Last Review", "Current In Order"};

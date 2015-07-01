@@ -33,17 +33,19 @@ public class InventoryManagementSystem {
 		//writeToTxt();
 		//#region Demo Code
 		//#region Increasing stock message
-		//	List<ProductOrderLine> pll = new ArrayList<ProductOrderLine>();
-		//	ProductOrderLine pl = new ProductOrderLine(lastOrderLineCreated, productCatalog.get(4));
-		//	ProductOrderLine pl2 = new ProductOrderLine(lastOrderLineCreated, productCatalog.get(7));
-		//	ProductOrderLine pl3 = new ProductOrderLine(lastOrderLineCreated, productCatalog.get(1));
-		//	pl.ChangeQuantity(15);
-		//	pl2.ChangeQuantity(50);
-		//	pl3.ChangeQuantity(5);
-		//	pll.add(pl);
-		//	pll.add(pl2);
-		//	pll.add(pl3);
-			//StockIncreaseAlert("Products Recieved: ", "Product Order Recieved: " + lastOrderLineCreated, pll);
+		/*	
+			List<ProductOrderLine> pll = new ArrayList<ProductOrderLine>();
+			ProductOrderLine pl = new ProductOrderLine(lastOrderLineCreated, productCatalog.get(4));
+			ProductOrderLine pl2 = new ProductOrderLine(lastOrderLineCreated, productCatalog.get(7));
+			ProductOrderLine pl3 = new ProductOrderLine(lastOrderLineCreated, productCatalog.get(1));
+			pl.ChangeQuantity(15);
+			pl2.ChangeQuantity(50);
+			pl3.ChangeQuantity(5);
+			pll.add(pl);
+			pll.add(pl2);
+			pll.add(pl3);
+			StockIncreaseAlert("Products Recieved: ", "Product Order Recieved: " + lastOrderLineCreated, pll);
+		*/
 		//#endregion
 		//#region error message
 			//InventoryManagementSystem.ErrorAlert("Database Connection Error", "DBC019", new Exception("No database found"), Level.SEVERE);
@@ -201,7 +203,7 @@ public class InventoryManagementSystem {
 			for(int i = 0; i<inProducts.size();i++)
 			{
 				//text
-				finalString += String.format("Product Name: (%s) %-35s Quantity: %-35d", inProducts.get(i).Product().productID(),inProducts.get(i).Product().ProductName(),inProducts.get(i).Quantity());
+				finalString += String.format("Product Name: (%s) %-35s \t Quantity: %-35d", inProducts.get(i).Product().productID(),inProducts.get(i).Product().ProductName(),inProducts.get(i).Quantity());
 				finalString += "\r\n";
 				//Logic
 				//update product
@@ -212,7 +214,7 @@ public class InventoryManagementSystem {
 			logger.log(Level.FINE, "Stock Increased: " + inTitle);
 			JOptionPane pane = new JOptionPane();
 			pane.setSize(500, 200*inProducts.size());
-			pane.showMessageDialog(null,"Stock Recieved: " + finalString, "Stock Recieved", JOptionPane.INFORMATION_MESSAGE);
+			pane.showMessageDialog(null,"Stock Received: " + finalString, "Stock Received", JOptionPane.INFORMATION_MESSAGE);
 		}
 	/**
 	 * Displays a message alerting the user to an error that has arisen	
@@ -334,22 +336,29 @@ public class InventoryManagementSystem {
 			writer = new PrintWriter(fileDirectory, "UTF-8");
 			try
 			{
-				writer.println("<StartOfReport>");
-				writer.println("<DateTime: " +DateTime()+">");
+				String formatString = "%-15s %-30s %-20s %-30s %-30s %-20s %-20s";
+				String seperator = "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ";
+				writer.println(seperator);
+				writer.println("NB Gardens Stock List");
+				writer.println("DateTime: " +DateTime()+">");
+				writer.println(String.format(formatString,"Product ID","Product Name", "Current Stock", "Recommended Stock Level", "Critical Stock Level", "Product Cost", "Currently in Order"));
+				writer.println(seperator);
 				for(int i = 0; i<productCatalog.size();i++)
 				{
-					writer.println(String.format(
-							"Product ID: %s %n Product Name: %s %n Current Stock: %s %n Recommended Stock Level: %s %n Critical Stock Level: %s %n Product Cost: %s", 
+					writer.println(String.format(formatString,
 							productCatalog.get(i).productID(),
 							productCatalog.get(i).ProductName(),
 							productCatalog.get(i).ProductStock(),
 							productCatalog.get(i).RequiredStock(),
 							productCatalog.get(i).CriticalLevel(),
-							productCatalog.get(i).ProductCost()
+							productCatalog.get(i).ProductCost(),
+							productCatalog.get(i).CurrentInOrder()
 							));
 					writer.flush();
 				}
-				writer.println("<EndOfReport>");
+				writer.println(seperator);
+				writer.println("End Of Stock List");
+				writer.println(seperator);
 				writer.flush();
 			}
 			catch (Exception e)
@@ -400,22 +409,26 @@ public class InventoryManagementSystem {
 			int totalCost = 0;
 			try
 			{	
+				String seperator = "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ";
 				pw = new PrintWriter(fileDirectory,"UTF-8");
+				pw.println(seperator);
 				pw.println("Product Order Form");;
-				pw.println("Date Of Product Order Creation: " + DateTime());
+				pw.println("Date Of Creation: " + DateTime());
+				String formatString = "%-10s %-30s %-20s %-20s";
+				pw.println(String.format(formatString,"Product ID","Product Name","Quantity","Cost"));
+				pw.println(seperator);
 				for(Product prod : toBeOrdered)
 				{
 					int changeInStockRequired = prod.RequiredStock() - prod.ProductStock(); 
 					int changeInStockCost = changeInStockRequired * prod.ProductCost();
 					totalCost += changeInStockCost;
-					pw.println(String.format("Product Name: %s \r\n Product Quantity: %s \r\n Product Cost: %s",
-							prod.ProductName(),
-							changeInStockRequired,changeInStockCost
-							));
+					pw.println(String.format(formatString,prod.productID(),prod.ProductName(),changeInStockRequired,changeInStockCost));
 				}
 				//Possible finance changer (100=1£ ext..)
+				pw.println(seperator);
 				pw.println("Total Cost: " + totalCost);
 				pw.println("Product Order Form For NBGardens");
+				pw.println(seperator);
 				pw.flush();
 				pw.close();
 				JOptionPane.showMessageDialog(null,"Stock Order Created at " + fileDirectory,"Stock Order Report Created",  JOptionPane.INFORMATION_MESSAGE);
@@ -458,14 +471,18 @@ public class InventoryManagementSystem {
 						Product tempProduct = new Product(tempID, tempName, tempStock, tempReq, tempCrit, tempCost, tempSLP, tempCIO);
 						//Throw up messages and alerts //FIXME Messages should throw automatically on adjustments //Remove or remove editing messages
 						Product originalProduct = productCatalog.get(i);
+						//used to store changed products
+						ArrayList<ProductOrderLine> tempArray = new ArrayList<ProductOrderLine>();
 						if(tempProduct.ProductStock() <= tempProduct.CriticalLevel())
 						{
 							LowStockAlert(tempProduct.ProductName(),tempProduct.productID());
 						}
 						if(tempProduct.ProductStock()> originalProduct.ProductStock())
 						{
-							ArrayList<ProductOrderLine> tempArray = new ArrayList<ProductOrderLine>();
-							tempArray.add(new ProductOrderLine(lastOrderLineCreated,tempProduct));
+							ProductOrderLine tempOrder = new ProductOrderLine(lastOrderLineCreated,tempProduct);
+							tempOrder.ChangeQuantity(tempProduct.ProductStock() - originalProduct.ProductStock());
+							//System.out.println(tempOrder.Quantity()));
+							tempArray.add(tempOrder);
 							StockIncreaseAlert("Stock has increased","The following items have increased: ", tempArray);
 						}
 						
